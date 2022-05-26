@@ -2,21 +2,24 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Login implements ActionListener{
+    private static JFrame frame;
+    private static JPanel panel;
+    private static JLabel userLabel;
     private static JTextField userText;
     private static JLabel passwordLabel;
     private static JPasswordField passwordText;
     private static JButton button;
     private static JLabel success;
     public static void main(String args[]){
-        JFrame frame = new JFrame("Autenticazione");
-        JPanel panel = new JPanel();
-        JLabel userLabel = new JLabel("Username");
+        frame = new JFrame("Autenticazione");
+        panel = new JPanel();
 
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
         panel.setLayout(null);
 
+        userLabel = new JLabel("Username");
         userLabel.setBounds(10, 20, 80, 25);
         panel.add(userLabel);
         userText = new JTextField();
