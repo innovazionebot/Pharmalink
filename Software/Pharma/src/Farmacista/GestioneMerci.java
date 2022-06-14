@@ -3,8 +3,14 @@ package Farmacista;
 import Login.Login;
 import java.awt.HeadlessException;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.*;
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -15,10 +21,12 @@ public class GestioneMerci extends javax.swing.JFrame {
     public GestioneMerci() throws ClassNotFoundException {
         initComponents();
         mostra_farmaci();
+        /*
         quantitaField.setEditable(true);
         scadenzaField.setEditable(false);
         nomeFarmacoField.setEditable(false);
         principioField.setEditable(false);
+        */
     }
     
     public ArrayList<Catalogo> farmacoList() throws ClassNotFoundException{
@@ -33,12 +41,12 @@ public class GestioneMerci extends javax.swing.JFrame {
             this.connessione = DriverManager.getConnection(url+dbName, username, password);
             id = CheckID.getID();
             idContratto = CheckContratto.getID();
-            String query = "SELECT nome, principio, scadenza, quantita FROM farmaco";
+            String query = "SELECT idFarmaco, nome, principio, scadenza, quantita FROM farmaco";
             Statement st = connessione.createStatement();
             ResultSet rs = st.executeQuery(query);
             Catalogo catalogo;
             while(rs.next()){
-                catalogo = new Catalogo(rs.getString("nome"), rs.getString("principio"), rs.getString("scadenza"), rs.getString("quantita"));
+                catalogo = new Catalogo(rs.getString("idFarmaco"), rs.getString("nome"), rs.getString("principio"), rs.getString("scadenza"), rs.getString("quantita"));
                 farmaciList.add(catalogo);
             }
         }
@@ -54,12 +62,13 @@ public class GestioneMerci extends javax.swing.JFrame {
     public void mostra_farmaci() throws ClassNotFoundException{
         ArrayList<Catalogo> farmaci = farmacoList();
         DefaultTableModel model = (DefaultTableModel) tabellaFarmaci.getModel();
-        Object[] righe = new Object[4];
+        Object[] righe = new Object[5];
         for(int i=0;i<farmaci.size(); i++){
-            righe[0] = farmaci.get(i).getNomeFarmaco();
-            righe[1] = farmaci.get(i).getPrincipio();
-            righe[2] = farmaci.get(i).getScadenza();
-            righe[3] = farmaci.get(i).getQuantita();
+            righe[0] = farmaci.get(i).getIdFarmaco();
+            righe[1] = farmaci.get(i).getNomeFarmaco();
+            righe[2] = farmaci.get(i).getPrincipio();
+            righe[3] = farmaci.get(i).getScadenza();
+            righe[4] = farmaci.get(i).getQuantita();
             model.addRow(righe);
         }
     }
@@ -71,15 +80,6 @@ public class GestioneMerci extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabellaFarmaci = new javax.swing.JTable();
         confermaButton = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        nomeFarmacoField = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        scadenzaField = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        principioField = new javax.swing.JTextField();
-        resettaCampi = new javax.swing.JButton();
-        quantitaField = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,11 +97,11 @@ public class GestioneMerci extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Principio", "Scadenza", "Quantita"
+                "idFarmaco", "Nome", "Principio", "Scadenza", "Disponibili", "Quantita"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -126,115 +126,28 @@ public class GestioneMerci extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Nome farmaco");
-
-        nomeFarmacoField.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        nomeFarmacoField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nomeFarmacoFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel6.setText("Quantità");
-
-        scadenzaField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scadenzaFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setText("Scadenza");
-
-        principioField.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        principioField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                principioFieldActionPerformed(evt);
-            }
-        });
-
-        resettaCampi.setText("Reset");
-        resettaCampi.setMaximumSize(new java.awt.Dimension(104, 28));
-        resettaCampi.setMinimumSize(new java.awt.Dimension(104, 28));
-        resettaCampi.setPreferredSize(new java.awt.Dimension(104, 28));
-        resettaCampi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resettaCampiActionPerformed(evt);
-            }
-        });
-
-        quantitaField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quantitaFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setText("Principio");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(quantitaField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(nomeFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(scadenzaField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(principioField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(resettaCampi, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(confermaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                    .addComponent(confermaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomeFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(principioField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(scadenzaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(quantitaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(exitButton)
-                            .addComponent(resettaCampi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -258,15 +171,12 @@ public class GestioneMerci extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void confermaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confermaButtonActionPerformed
-        id = CheckID.getID();
-        ResultSet rs;
-        PreparedStatement pst1, pst2, pst3, pst4;
-        Statement st;
+        ResultSet rs, rs2;
+        Statement st, st2;
         try{
-            int righe = tabellaFarmaci.getSelectedRow();
-            String nomeFarmaco = (tabellaFarmaci.getModel().getValueAt(righe, 0).toString());
-            String quantitaScelta = quantitaField.getText();
-            String q = "SELECT f.idFarmaco, o.idOrdine from farmaco f, ordine o WHERE f.nome = '"+nomeFarmaco+"'";
+            int rigaSelezionata = tabellaFarmaci.getSelectedRow();
+            String nomeFarmaco = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 1).toString());
+            String q = "SELECT idFarmaco from farmaco WHERE nome = '"+nomeFarmaco+"'";
             st = connessione.prepareStatement(q);
             rs = st.executeQuery(q);
             if(!rs.next()){
@@ -275,81 +185,82 @@ public class GestioneMerci extends javax.swing.JFrame {
                 rs.close();
             }
             else{
-                String idFarmaco = rs.getString("f.idFarmaco");
-                String idOrdine = rs.getString("o.idOrdine");
-                String ordine = "INSERT INTO ordine(idUtente, dataConsegna, stato, note) VALUES ('"+id+"', DATE_ADD(NOW(), INTERVAL 7 DAY), \"In preparazione\", \"Nessun errore\")";
-                pst1 = connessione.prepareStatement(ordine);
-                pst1.executeUpdate();
+                String idFarmaco = rs.getString("idFarmaco");
+                String quantita = "";
+                String statoConsegna = "In preparazione";
+                String noteConsegna = "NULL";
+                Date date = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dt = dateFormat.format(date);
+                Calendar c = Calendar.getInstance();
+                c.setTime(dateFormat.parse(dt));
+                c.add(Calendar.DATE, 7);
+                dt = dateFormat.format(c.getTime());     
                 
+                Date date2 = new Date();
+                DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dt2 = dateFormat2.format(date2);
                 
+                PreparedStatement pst, pst2, pst3;
+                String query = "INSERT INTO ordine(idUtente, dataConsegna, stato, note, dataOrdine) VALUES ('"+id+"', DATE_ADD(NOW(), INTERVAL 7 DAY), \"In preparazione\", \"NULL\", '"+dt2+"')";
+                pst = connessione.prepareStatement(query);
+                pst.executeUpdate();
+                // Ordine creato
                 
-                
-                
-                String quantita = "INSERT INTO farmacoordine(idFarmaco, idOrdine, quantita) VALUES ('"+idFarmaco+"', '"+idOrdine+"', '"+quantitaScelta+"')";
-                pst2 = connessione.prepareStatement(quantita);  
-                pst2.executeUpdate();
-                //String completa = "ALTER TABLE farmaco SET quantita = quantita - "+quantitaScelta+"'";
-                String completa = "UPDATE farmaco SET quantita = quantita - '"+quantitaScelta+"' WHERE idFarmaco = '"+idFarmaco+"'";
-                pst3 = connessione.prepareStatement(completa);
-                pst3.executeUpdate();
-                JOptionPane.showMessageDialog(null,"Ordine effettuato con successo.", "Completamento ordine", JOptionPane.PLAIN_MESSAGE);
-                DefaultTableModel model = (DefaultTableModel)tabellaFarmaci.getModel();
-                model.setRowCount(0);
-                mostra_farmaci();
+                String query2 = "SELECT idOrdine from ordine WHERE idUtente = '"+id+"' AND dataOrdine = '"+dt2+"'";
+                System.out.println("prova");
+                st2 = connessione.prepareStatement(query2);
+                rs2 = st2.executeQuery(query2);
+                if(!rs2.next()){
+                    JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
+                    st2.close();
+                    rs2.close();
+                }
+                int idOrdine = rs2.getInt("idOrdine");
+                // idOrdine return
+                String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita) VALUES (?, ?, ?)";
+                pst2 = connessione.prepareStatement(query3);
+                for (int i=0; i<tabellaFarmaci.getSelectedRowCount(); i++){
+                    quantita = (tabellaFarmaci.getValueAt(i, 5).toString());
+                    idFarmaco = (tabellaFarmaci.getValueAt(i, 0).toString());
+                    if(Integer.parseInt(quantita)>0){
+                        pst2.setInt(1, idOrdine);
+                        pst2.setString(2, idFarmaco);
+                        pst2.setString(3, quantita);
+                        pst2.executeUpdate();
+                        String completa = "UPDATE farmaco SET quantita = quantita - '"+quantita+"' WHERE idFarmaco = '"+idFarmaco+"'";
+                        pst3 = connessione.prepareStatement(completa);
+                        pst3.executeUpdate();
+                    }
+                }
+                this.setVisible(false);
+                GestioneMerci gm = new GestioneMerci();
+                gm.setVisible(true);
+                gm.toFront();
+                gm.setTitle("Pharmalink - Gestione Merci");
+                gm.setResizable(false);
             }
-        }
-        catch(HeadlessException | SQLException  e){
-            Logger.getLogger(GestioneMerci.class.getName()).log(Level.SEVERE, null, e);
-            JOptionPane.showMessageDialog(null, e);
+        } catch (SQLException | ParseException ex) {
+            Logger.getLogger(GestioneMerci.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GestioneMerci.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_confermaButtonActionPerformed
 
-    private void resettaCampiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resettaCampiActionPerformed
-        nomeFarmacoField.setText("");
-        principioField.setText("");
-        scadenzaField.setText("");
-        quantitaField.setText("");
-    }//GEN-LAST:event_resettaCampiActionPerformed
-
-    private void quantitaFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantitaFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_quantitaFieldActionPerformed
-
     private void tabellaFarmaciMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabellaFarmaciMouseClicked
+        /*
         int i = tabellaFarmaci.getSelectedRow();
         TableModel model = tabellaFarmaci.getModel();
         nomeFarmacoField.setText(model.getValueAt(i, 0).toString());
         principioField.setText(model.getValueAt(i, 1).toString());
         scadenzaField.setText(model.getValueAt(i, 2).toString());
+        */
     }//GEN-LAST:event_tabellaFarmaciMouseClicked
-
-    private void scadenzaFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scadenzaFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_scadenzaFieldActionPerformed
-
-    private void principioFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_principioFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_principioFieldActionPerformed
-
-    private void nomeFarmacoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeFarmacoFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nomeFarmacoFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton confermaButton;
     private javax.swing.JButton exitButton;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField nomeFarmacoField;
-    private javax.swing.JTextField principioField;
-    private javax.swing.JTextField quantitaField;
-    private javax.swing.JButton resettaCampi;
-    private javax.swing.JTextField scadenzaField;
     private javax.swing.JTable tabellaFarmaci;
     // End of variables declaration//GEN-END:variables
 }

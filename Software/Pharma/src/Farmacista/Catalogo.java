@@ -9,12 +9,13 @@ package Farmacista;
  * @author salva
  */
 class Catalogo {
-    private String nome, principio, scadenza, quantita;
-    public Catalogo(String nome, String principio, String scadenza, String quantita){
+    private String idFarmaco, nome, principio, scadenza, quantita;
+    public Catalogo(String idFarmaco, String nome, String principio, String scadenza, String quantita){
         this.nome = nome;
         this.principio = principio;
         this.quantita = quantita;
         this.scadenza = scadenza;
+        this.idFarmaco = idFarmaco;
     }
     
     public String getNomeFarmaco(){
@@ -31,5 +32,9 @@ class Catalogo {
     
     public String getScadenza(){
         return scadenza;
+    }
+    
+    public String getIdFarmaco(){
+        return idFarmaco;
     }
 }
