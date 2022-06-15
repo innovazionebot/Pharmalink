@@ -240,21 +240,13 @@ public class GestioneMerci extends javax.swing.JFrame {
                 gm.setTitle("Pharmalink - Gestione Merci");
                 gm.setResizable(false);
             }
-        } catch (SQLException | ParseException ex) {
-            Logger.getLogger(GestioneMerci.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ParseException | ClassNotFoundException ex) {
             Logger.getLogger(GestioneMerci.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_confermaButtonActionPerformed
 
     private void tabellaFarmaciMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabellaFarmaciMouseClicked
-        /*
-        int i = tabellaFarmaci.getSelectedRow();
-        TableModel model = tabellaFarmaci.getModel();
-        nomeFarmacoField.setText(model.getValueAt(i, 0).toString());
-        principioField.setText(model.getValueAt(i, 1).toString());
-        scadenzaField.setText(model.getValueAt(i, 2).toString());
-        */
+
     }//GEN-LAST:event_tabellaFarmaciMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
