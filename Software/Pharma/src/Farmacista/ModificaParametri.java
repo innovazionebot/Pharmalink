@@ -1,5 +1,6 @@
 package Farmacista;
 
+import IndirizzoIP.IndirizzoIP;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.*;
@@ -22,7 +23,8 @@ public class ModificaParametri extends javax.swing.JFrame {
     public ArrayList<Farmaci> farmacoList() throws ClassNotFoundException{
         ArrayList<Farmaci> farmaciList = new ArrayList<>();
         try{
-            String url = "jdbc:mysql://localhost:3306/";
+            IndirizzoIP address = new IndirizzoIP();
+            String url = "jdbc:mysql://" + address.ip + "/";
             String dbName = "pharmalinkazienda";
             String driver = "com.mysql.cj.jdbc.Driver";
             String username = "root";
@@ -268,6 +270,9 @@ public class ModificaParametri extends javax.swing.JFrame {
                 Farmacista gcf = new Farmacista();
                 gcf.toFront();
                 gcf.setVisible(true);
+                gcf.setTitle("Pharmalink - Menù Farmacista");
+                gcf.setResizable(false);
+                gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Farmacista.class.getName()).log(Level.SEVERE, null, ex);
             }

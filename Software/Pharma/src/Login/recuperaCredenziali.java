@@ -1,6 +1,7 @@
 // concluso
 package Login;
 
+import IndirizzoIP.IndirizzoIP;
 import Login.Login;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,8 +19,8 @@ import javax.swing.*;
 public class recuperaCredenziali extends javax.swing.JFrame {
     private Connection conn;
     public recuperaCredenziali() {
-        Connection conn;
-        String url = "jdbc:mysql://localhost:3306/";
+        IndirizzoIP address = new IndirizzoIP();
+        String url = "jdbc:mysql://" + address.ip + "/";
         String dbName = "pharmalinkazienda";
         String driver = "com.mysql.cj.jdbc.Driver";
         String username = "root";
@@ -46,6 +47,7 @@ public class recuperaCredenziali extends javax.swing.JFrame {
         menu_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(31, 214, 85));
 
         nome_field.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         nome_field.addActionListener(new java.awt.event.ActionListener() {
@@ -54,12 +56,15 @@ public class recuperaCredenziali extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         jLabel1.setText("Inserisci email");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel2.setText("Recupera credenziali");
 
+        conferma_button.setBackground(new java.awt.Color(0, 204, 51));
+        conferma_button.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        conferma_button.setForeground(new java.awt.Color(255, 255, 255));
         conferma_button.setText("Conferma");
         conferma_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,7 +72,10 @@ public class recuperaCredenziali extends javax.swing.JFrame {
             }
         });
 
-        menu_button.setText("Main menù");
+        menu_button.setBackground(new java.awt.Color(204, 0, 0));
+        menu_button.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menu_button.setForeground(new java.awt.Color(255, 255, 255));
+        menu_button.setText("Torna indietro");
         menu_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_buttonActionPerformed(evt);
@@ -81,15 +89,15 @@ public class recuperaCredenziali extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(58, 58, 58)
-                        .addComponent(nome_field, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(nome_field, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(menu_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(menu_button, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                         .addGap(108, 108, 108)
-                        .addComponent(conferma_button, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(conferma_button, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
@@ -97,11 +105,11 @@ public class recuperaCredenziali extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nome_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addComponent(nome_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(conferma_button)
                     .addComponent(menu_button))
@@ -186,6 +194,9 @@ public class recuperaCredenziali extends javax.swing.JFrame {
             Login log = new Login();
             log.toFront();
             log.setVisible(true);
+            log.getContentPane().setBackground(new java.awt.Color(198,231,201));
+            log.setResizable(false);
+            log.setTitle("Pharmalink - Autenticazione");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(recuperaCredenziali.class.getName()).log(Level.SEVERE, null, ex);
         }

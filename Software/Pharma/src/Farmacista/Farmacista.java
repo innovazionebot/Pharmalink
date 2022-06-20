@@ -1,5 +1,6 @@
 package Farmacista;
 
+import IndirizzoIP.IndirizzoIP;
 import Login.Login;
 import java.awt.HeadlessException;
 import java.sql.*;
@@ -10,7 +11,9 @@ public class Farmacista extends javax.swing.JFrame {
     private Connection connessione;
     private String id;
     public Farmacista() throws ClassNotFoundException {
-        String url = "jdbc:mysql://localhost:3306/";
+        this.getContentPane().setBackground(new java.awt.Color(198,231,201));
+        IndirizzoIP address = new IndirizzoIP();
+        String url = "jdbc:mysql://" + address.ip + "/";
         String dbName = "pharmalinkazienda";
         String driver = "com.mysql.cj.jdbc.Driver";
         String username = "root";
@@ -39,13 +42,14 @@ public class Farmacista extends javax.swing.JFrame {
         CatalogoButton = new javax.swing.JButton();
         tracciaButton = new javax.swing.JButton();
         gestioneContrattoButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         logoutButton.setBackground(new java.awt.Color(204, 0, 0));
-        logoutButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        logoutButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         logoutButton.setForeground(new java.awt.Color(255, 255, 255));
         logoutButton.setText("Logout");
         logoutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -54,23 +58,23 @@ public class Farmacista extends javax.swing.JFrame {
             }
         });
 
-        CatalogoButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        CatalogoButton.setText("Catalogo");
+        CatalogoButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        CatalogoButton.setText("Ordina farmaco");
         CatalogoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CatalogoButtonActionPerformed(evt);
             }
         });
 
-        tracciaButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        tracciaButton.setText("Traccia i miei ordini");
+        tracciaButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        tracciaButton.setText("Traccia ordini");
         tracciaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tracciaButtonActionPerformed(evt);
             }
         });
 
-        gestioneContrattoButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        gestioneContrattoButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         gestioneContrattoButton.setText("Gestione Contratto");
         gestioneContrattoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,31 +82,44 @@ public class Farmacista extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setText("Menù Farmacista");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(logoutButton)
-                    .addComponent(CatalogoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tracciaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(gestioneContrattoButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(124, 124, 124)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabel2)
+                            .addComponent(gestioneContrattoButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tracciaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(CatalogoButton, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(logoutButton)))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
                 .addComponent(gestioneContrattoButton)
                 .addGap(18, 18, 18)
                 .addComponent(CatalogoButton)
                 .addGap(18, 18, 18)
                 .addComponent(tracciaButton)
                 .addGap(18, 18, 18)
-                .addComponent(logoutButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -116,8 +133,11 @@ public class Farmacista extends javax.swing.JFrame {
             try {
                 this.setVisible(false);
                 Login log = new Login();
+                log.getContentPane().setBackground(new java.awt.Color(198,231,201));
                 log.toFront();
+                log.setResizable(false);
                 log.setVisible(true);
+                log.setTitle("Pharmalink - Autenticazione");
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Farmacista.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -145,6 +165,7 @@ public class Farmacista extends javax.swing.JFrame {
                 to.toFront();
                 to.setTitle("Pharmalink - Traccia Ordini");
                 to.setResizable(false);
+                to.getContentPane().setBackground(new java.awt.Color(198,231,201));
                 CheckID controllo = new CheckID(id);
             }
         }
@@ -170,11 +191,12 @@ public class Farmacista extends javax.swing.JFrame {
                 }
             else{
                 this.setVisible(false);
-                GestioneMerci mc = new GestioneMerci();
+                OrdinaFarmaco mc = new OrdinaFarmaco();
                 mc.setVisible(true);
                 mc.toFront();
-                mc.setTitle("Pharmalink - Gestione Merci");
+                mc.setTitle("Pharmalink - Ordina farmaco");
                 mc.setResizable(false);
+                mc.getContentPane().setBackground(new java.awt.Color(198,231,201));
                 CheckID controllo = new CheckID(id);
             }
         }
@@ -207,6 +229,7 @@ public class Farmacista extends javax.swing.JFrame {
                 gcf.toFront();
                 gcf.setTitle("Pharmalink - Gestione Contratto");
                 gcf.setResizable(false);
+                gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
                 CheckID controllo = new CheckID(id);
             }
         }
@@ -219,6 +242,7 @@ public class Farmacista extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CatalogoButton;
     private javax.swing.JButton gestioneContrattoButton;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
