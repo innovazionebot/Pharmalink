@@ -232,7 +232,7 @@ public class GestioneOrdini extends javax.swing.JFrame {
             }
         }
         catch(HeadlessException | SQLException | ClassNotFoundException e){
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(GestioneOrdini.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_modificaOrdineButtonActionPerformed

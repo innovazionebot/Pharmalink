@@ -287,7 +287,7 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                             }
                         }
                     }
-                    JOptionPane.showMessageDialog(null,"Farmaci ordinati con successo.", "Completamento ordine", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Farmaci ordinati con successo.", "Completamento ordine", JOptionPane.PLAIN_MESSAGE);
                     this.setVisible(false);
                     OrdinaFarmaco gm = new OrdinaFarmaco();
                     gm.setVisible(true);
