@@ -35,6 +35,7 @@ public ArrayList<Ordini> storicoList() throws ClassNotFoundException{
             id = CheckID.getID();
             idContratto = CheckContratto.getID();
             String query = "SELECT idOrdine, dataOrdine, dataConsegna, stato FROM ordine WHERE idUtente = '"+id+"' AND (stato = \"Consegnato\" OR stato = \"Errore\")";
+            //String query = "SELECT idOrdine, dataOrdine, dataConsegna, stato FROM ordine WHERE idUtente = '"+id+"'";
             Statement st = connessione.createStatement();
             ResultSet rs = st.executeQuery(query);
             Ordini ordini;

@@ -212,7 +212,6 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null,"Email o password errata, riprova.", "Errore", JOptionPane.WARNING_MESSAGE);
                         pst.close();
                         rs.close();
-                        return;
                     }
                     // Menù Farmacista
                     if(email.equals(rs.getString("email")) && password.equals(rs.getString("password")) && farmacista.equals(rs.getString("lavoro"))){
