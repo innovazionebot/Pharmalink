@@ -14,14 +14,10 @@ public class ModificaParametri extends javax.swing.JFrame {
     public ModificaParametri() throws ClassNotFoundException {
         initComponents();
         mostra_farmaci();
-        periodicitaField.setEditable(true);
-        quantitaFarmacoField.setEditable(true);
-        nomeFarmacoField.setEditable(false);
-        principioField.setEditable(false);
     }
 
-    public ArrayList<Farmaci> farmacoList() throws ClassNotFoundException{
-        ArrayList<Farmaci> farmaciList = new ArrayList<>();
+    public ArrayList<Farmaci> contrattoList() throws ClassNotFoundException{
+        ArrayList<Farmaci> contrattiList = new ArrayList<>();
         try{
             IndirizzoIP address = new IndirizzoIP();
             String url = "jdbc:mysql://" + address.ip + "/";
@@ -37,10 +33,10 @@ public class ModificaParametri extends javax.swing.JFrame {
             String query = "SELECT f.nome, f.principio, fc.quantita, fc.periodo, fc.idContratto, u.id FROM farmacocontratto fc INNER JOIN contratto c ON c.idContratto = fc.idContratto INNER JOIN farmaco f ON f.idFarmaco = fc.idFarmaco INNER JOIN utente u ON u.id='"+id+"' AND c.idContratto = '"+idContratto+"'";
             Statement st = connessione.createStatement();
             ResultSet rs = st.executeQuery(query);
-            Farmaci farmaci;
+            Farmaci contratti;
             while(rs.next()){
-                farmaci = new Farmaci(rs.getString("f.nome"), rs.getString("f.principio"), rs.getString("fc.quantita"), rs.getString("fc.periodo"));
-                farmaciList.add(farmaci);
+                contratti = new Farmaci(rs.getString("f.nome"), rs.getString("f.principio"), rs.getString("fc.quantita"), rs.getString("fc.periodo"));
+                contrattiList.add(contratti);
             }
         }
         catch (SQLException ex){
@@ -49,11 +45,11 @@ public class ModificaParametri extends javax.swing.JFrame {
             System.out.println("VendorError: " + ex.getErrorCode());
             JOptionPane.showMessageDialog(null, ex);
         }
-        return farmaciList;
+        return contrattiList;
     }
 
     public void mostra_farmaci() throws ClassNotFoundException{
-        ArrayList<Farmaci> farmaci = farmacoList();
+        ArrayList<Farmaci> farmaci = contrattoList();
         DefaultTableModel model = (DefaultTableModel) tabellaFarmaci.getModel();
         Object[] righe = new Object[4];
         for(int i=0;i<farmaci.size(); i++){
@@ -74,16 +70,7 @@ public class ModificaParametri extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tabellaFarmaci = new javax.swing.JTable();
         tornaIndietroButton = new javax.swing.JButton();
-        resettaCampi = new javax.swing.JButton();
         confermaButton = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        nomeFarmacoField = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        quantitaFarmacoField = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        periodicitaField = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        principioField = new javax.swing.JTextField();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -92,17 +79,19 @@ public class ModificaParametri extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(31, 214, 85));
+        setPreferredSize(new java.awt.Dimension(1076, 666));
 
         tabellaFarmaci.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "nomeFarmaco", "principioAttivo", "quantitaFarmaco", "periodo"
+                "Farmaco", "Principio Attivo", "Quantità Attuale", "Periodo Attuale", "Nuova Quantità", "Nuovo Periodo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -116,77 +105,25 @@ public class ModificaParametri extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(tabellaFarmaci);
-        if (tabellaFarmaci.getColumnModel().getColumnCount() > 0) {
-            tabellaFarmaci.getColumnModel().getColumn(0).setResizable(false);
-            tabellaFarmaci.getColumnModel().getColumn(1).setResizable(false);
-            tabellaFarmaci.getColumnModel().getColumn(2).setResizable(false);
-            tabellaFarmaci.getColumnModel().getColumn(3).setResizable(false);
-        }
 
         tornaIndietroButton.setBackground(new java.awt.Color(204, 0, 0));
+        tornaIndietroButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         tornaIndietroButton.setForeground(new java.awt.Color(255, 255, 255));
-        tornaIndietroButton.setText("Torna indietro");
+        tornaIndietroButton.setText("Torna al menù principale");
         tornaIndietroButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tornaIndietroButtonActionPerformed(evt);
             }
         });
 
-        resettaCampi.setText("Reset");
-        resettaCampi.setMaximumSize(new java.awt.Dimension(104, 28));
-        resettaCampi.setMinimumSize(new java.awt.Dimension(104, 28));
-        resettaCampi.setPreferredSize(new java.awt.Dimension(104, 28));
-        resettaCampi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resettaCampiActionPerformed(evt);
-            }
-        });
-
         confermaButton.setBackground(new java.awt.Color(0, 204, 0));
+        confermaButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         confermaButton.setForeground(new java.awt.Color(255, 255, 255));
-        confermaButton.setText("Conferma");
+        confermaButton.setText("Conferma Modifiche");
         confermaButton.setMinimumSize(new java.awt.Dimension(104, 28));
         confermaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confermaButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Nome farmaco");
-
-        nomeFarmacoField.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        nomeFarmacoField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nomeFarmacoFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel6.setText("Quantità");
-
-        quantitaFarmacoField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quantitaFarmacoFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("Periodicità");
-
-        periodicitaField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                periodicitaFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setText("Principio");
-
-        principioField.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        principioField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                principioFieldActionPerformed(evt);
             }
         });
 
@@ -195,65 +132,20 @@ public class ModificaParametri extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(confermaButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(tornaIndietroButton, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                        .addComponent(resettaCampi, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(quantitaFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(principioField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(nomeFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(periodicitaField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(tornaIndietroButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1047, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomeFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(principioField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(quantitaFarmacoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(periodicitaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tornaIndietroButton)
-                            .addComponent(resettaCampi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tornaIndietroButton))
+                .addContainerGap())
         );
 
         pack();
@@ -278,73 +170,57 @@ public class ModificaParametri extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tornaIndietroButtonActionPerformed
-
-    private void resettaCampiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resettaCampiActionPerformed
-        nomeFarmacoField.setText("");
-        principioField.setText("");
-        quantitaFarmacoField.setText("");
-        periodicitaField.setText("");
-    }//GEN-LAST:event_resettaCampiActionPerformed
     
     private void confermaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confermaButtonActionPerformed
+        PreparedStatement pst;
         try {
         int righe = tabellaFarmaci.getSelectedRow();
         String nomeFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(righe, 0).toString());
-        String query = "UPDATE farmacocontratto fc INNER JOIN farmaco f ON f.idFarmaco = fc.idFarmaco AND f.nome = '"+nomeFarmacoSelezionato+"' SET fc.quantita = ?, fc.periodo = ?";
-        PreparedStatement pst;
-        pst = connessione.prepareStatement(query);
-        pst.setString(1, quantitaFarmacoField.getText());
-        pst.setString(2, periodicitaField.getText());
-        pst.executeUpdate();
-        DefaultTableModel model = (DefaultTableModel)tabellaFarmaci.getModel();
-        model.setRowCount(0);
-        mostra_farmaci();
+        String quantita = (tabellaFarmaci.getModel().getValueAt(righe, 2).toString());
+        String periodo = (tabellaFarmaci.getModel().getValueAt(righe, 3).toString());
+        String quantita2 = "", periodo2 = "";
+        for (int i=0; i<tabellaFarmaci.getRowCount(); i++){
+            if(tabellaFarmaci.isRowSelected(i)){
+                quantita2 = (tabellaFarmaci.getModel().getValueAt(i, 4).toString());
+                periodo2 = (tabellaFarmaci.getModel().getValueAt(righe, 5).toString());
+                if((Integer.parseInt(quantita2)<Integer.parseInt(quantita)) || (Integer.parseInt(periodo2)<Integer.parseInt(periodo))){
+                    String query = "UPDATE farmacocontratto fc INNER JOIN farmaco f ON f.idFarmaco = fc.idFarmaco AND f.nome = '"+nomeFarmacoSelezionato+"' SET fc.quantita = ?, fc.periodo = ?";
+                    pst = connessione.prepareStatement(query);
+                    pst.setString(1, quantita2);
+                    pst.setString(2, periodo2);
+                    pst.executeUpdate();
+                }
+                else if((Integer.parseInt(quantita2)==Integer.parseInt(quantita)) && (Integer.parseInt(periodo2)==Integer.parseInt(periodo))){
+                    JOptionPane.showMessageDialog(null,"Attenzione!\nQuantità o periodo sono rimasti invariati.", "Segnalazione errore", JOptionPane.WARNING_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Errore", "Segnalazione errore", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null,"Farmaci ordinati con successo.", "Completamento ordine", JOptionPane.WARNING_MESSAGE);
+        this.setVisible(false);
+        ModificaParametri gm = new ModificaParametri();
+        gm.setVisible(true);
+        gm.toFront();
+        gm.setTitle("Pharmalink - Modifica Parametri");
+        gm.setResizable(false);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Nessun farmaco selezionato");
             Logger.getLogger(ModificaParametri.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_confermaButtonActionPerformed
 
-    private void nomeFarmacoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeFarmacoFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nomeFarmacoFieldActionPerformed
-
-    private void quantitaFarmacoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantitaFarmacoFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_quantitaFarmacoFieldActionPerformed
-
     private void tabellaFarmaciMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabellaFarmaciMouseClicked
-        int i = tabellaFarmaci.getSelectedRow();
-        TableModel model = tabellaFarmaci.getModel();
-        nomeFarmacoField.setText(model.getValueAt(i, 0).toString());
-        principioField.setText(model.getValueAt(i, 1).toString());
-        quantitaFarmacoField.setText(model.getValueAt(i, 2).toString());
-        periodicitaField.setText(model.getValueAt(i, 3).toString());
+
     }//GEN-LAST:event_tabellaFarmaciMouseClicked
-
-    private void periodicitaFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_periodicitaFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_periodicitaFieldActionPerformed
-
-    private void principioFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_principioFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_principioFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton confermaButton;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField nomeFarmacoField;
-    private javax.swing.JTextField periodicitaField;
-    private javax.swing.JTextField principioField;
-    private javax.swing.JTextField quantitaFarmacoField;
-    private javax.swing.JButton resettaCampi;
     private javax.swing.JTable tabellaFarmaci;
     private javax.swing.JButton tornaIndietroButton;
     // End of variables declaration//GEN-END:variables

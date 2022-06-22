@@ -1,25 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Farmacista;
 
-/**
- *
- * @author salva
- */
 public class Ordini {
-    private String idOrdine, quantita;
-    public Ordini(String idOrdine, String quantita){
+    private String idOrdine, dataOrdine, dataConsegna, stato;
+    public Ordini(String idOrdine, String dataOrdine, String dataConsegna, String stato){
         this.idOrdine = idOrdine;
-        this.quantita = quantita;
+        this.dataOrdine = dataOrdine;
+        this.dataConsegna = dataConsegna;
+        this.stato = stato;
     }
 
     public String getIdOrdine() {
         return idOrdine;
     }
 
-    public String getQuantita() {
-        return quantita;
+    public String getDataOrdine() {
+        return dataOrdine;
+    }
+    
+    public String getDataConsegna() {
+        return dataOrdine;
+    }
+    public String getStato() {
+        return stato;
+    }
+    
+    public void setIdOrdine(String id){
+        this.idOrdine = id;
     }
 }

@@ -139,23 +139,22 @@ public class recuperaCredenziali extends javax.swing.JFrame {
                     return;
                 }
                 if(email.equals(rs.getString("email"))){
-                    JOptionPane.showMessageDialog(null, "Un'email è stata inviata al tuo indirizzo email.\nVerifica la tua INBOX.", "Conferma invio email", JOptionPane.PLAIN_MESSAGE);
-                    this.setVisible(false);
-                    this.toBack();
+                    //JOptionPane.showMessageDialog(null, "Un'email è stata inviata al tuo indirizzo email.\nVerifica la tua INBOX.", "Conferma invio email", JOptionPane.PLAIN_MESSAGE);
                     String to = email;
-                    String from = "vivereingegneriainnovazione@gmail.com";
+                    String from = "salvatorevigano9@libero.";
                     String host = "smtp.gmail.com";
                     Properties properties = System.getProperties();
                     properties.put("mail.smtp.host", host);
                     properties.put("mail.smtp.port", "465");
-                    properties.put("mail.smtp.ssl.enable", "true");
                     properties.put("mail.smtp.auth", "true");
-                    //JOptionPane.showMessageDialog(null, "Qui di seguito le tue credenziali\nEmail: "+rs.getString("email")+"\nPassword: "+rs.getString("password"), "Recupero password", JOptionPane.PLAIN_MESSAGE);
-                            Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-                                protected PasswordAuthentication getPasswordAuthentication() {
-                                    return new PasswordAuthentication(from, "FilippoRos1!");
-                                }
-                            });
+                    properties.put("mail.smtp.starttls.enable","true");
+                    properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                    JOptionPane.showMessageDialog(null, "Qui di seguito le tue credenziali\nEmail: "+rs.getString("email")+"\nPassword: "+rs.getString("password"), "Recupero password", JOptionPane.PLAIN_MESSAGE);
+                    /*Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(from, "FilippoRos1!");
+                        }
+                    });
                     try{
                         MimeMessage message = new MimeMessage(session);
                         message.setFrom(new InternetAddress(from));
@@ -172,6 +171,7 @@ public class recuperaCredenziali extends javax.swing.JFrame {
                     catch(MessagingException mex){
                         mex.printStackTrace();
                     }
+                */
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Errore");
@@ -184,7 +184,7 @@ public class recuperaCredenziali extends javax.swing.JFrame {
         else{
             JFrame frame;
             frame = new JFrame("Errore");
-            JOptionPane.showMessageDialog(frame,"Campi vuoti in email o password", "Errore", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame,"Email campo vuoto", "Errore", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_conferma_buttonActionPerformed
 

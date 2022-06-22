@@ -1,23 +1,18 @@
 package Farmacista;
 
 import IndirizzoIP.IndirizzoIP;
-import Login.Login;
-import java.awt.HeadlessException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Calendar;
 import java.util.logging.*;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class OrdinaFarmaco extends javax.swing.JFrame {
     private Connection connessione;
@@ -81,6 +76,7 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
         confermaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(31, 214, 85));
 
         exitButton.setBackground(new java.awt.Color(204, 0, 0));
         exitButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -127,7 +123,7 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
         confermaButton.setBackground(new java.awt.Color(0, 204, 0));
         confermaButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         confermaButton.setForeground(new java.awt.Color(255, 255, 255));
-        confermaButton.setText("Conferma");
+        confermaButton.setText("Ordina");
         confermaButton.setMinimumSize(new java.awt.Dimension(104, 28));
         confermaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,23 +140,20 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(108, 108, 108)
-                        .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+                        .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(exitButton)
-                        .addContainerGap())))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exitButton)
+                    .addComponent(confermaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -185,34 +178,8 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_exitButtonActionPerformed
-    /*
-    public ArrayList<Ordini> filtraOrdini() throws ClassNotFoundException{
-        ArrayList<Ordini> ordineFiltrato = ordine;
-        DefaultTableModel model = (DefaultTableModel) tabellaFarmaci.getModel();
-        Object[] righe = new Object[5];
-        for(int i=0;i<farmaci.size(); i++){
-            righe[0] = farmaci.get(i).getIdFarmaco();
-            righe[1] = farmaci.get(i).getNomeFarmaco();
-            righe[2] = farmaci.get(i).getPrincipio();
-            righe[3] = farmaci.get(i).getScadenza();
-            righe[4] = farmaci.get(i).getQuantita();
-            model.addRow(righe);
-            
-        }
-        return null;
-    }
-    */
+
     private void confermaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confermaButtonActionPerformed
-        /*
-        List<Ordini> ordine = new ArrayList<>();
-        String idOrdine = "", quantita = "";
-        for(int i=0; i<tabellaFarmaci.getRowCount(); i++){
-            idOrdine = (tabellaFarmaci.getValueAt(i, 0).toString());
-            quantita = (tabellaFarmaci.getValueAt(i, 5).toString());
-            if(tabellaFarmaci.isEditing()){
-                ordine.add(new Ordini(idOrdine, quantita));
-            }
-        }*/
         ResultSet rs, rs2;
         Statement st, st2;
         PreparedStatement pst, pst2, pst3, pst4;
@@ -220,7 +187,6 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
         try{
             int rigaSelezionata = tabellaFarmaci.getSelectedRow();
             String nomeFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 1).toString());
-            String scadenzaFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 3).toString());
             String idFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 0).toString());
             String queryFarmaco = "SELECT idFarmaco, scadenza FROM farmaco WHERE nome = '"+nomeFarmacoSelezionato+"' AND idFarmaco = '"+idFarmacoSelezionato+"'";
             st = connessione.prepareStatement(queryFarmaco);
@@ -261,20 +227,20 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                         LocalDate dataSistema = LocalDate.now();
                         long giorni = ChronoUnit.DAYS.between(dataSistema, dataScadenza);
                         System.out.println("Riga "+i+" :"+"\nFarmaco selezionato: "+nomeFarmaco+"\nData attuale: "+dataSistema+"\nData scadenza: "+dataScadenza+"\nGiorni di differenza: "+giorni);
-                            if((giorni<=0) || (Integer.parseInt(disponibili) == 0)){
-                                JOptionPane.showMessageDialog(null,"Attenzione!\nIl farmaco " +nomeFarmaco+" è scaduto o terminato.", "Segnalazione farmaci scaduti o esauriti", JOptionPane.WARNING_MESSAGE);
-                            }
-                            else if(giorni > 0 && (giorni<=60 && Integer.parseInt(quantita)>0)){
-                                if (JOptionPane.showConfirmDialog(null, "Il seguente farmaco " +nomeFarmaco+" è in scadenza. Lo vuoi ugualmente?", "Segnalazione farmaci in scadenza", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
-                                    stato = true;
-                                }
-                            }
-                            else if(giorni > 60 && Integer.parseInt(quantita)>0){
+                        if((giorni<=0) || (Integer.parseInt(disponibili) == 0)){
+                            JOptionPane.showMessageDialog(null,"Attenzione!\nIl farmaco " +nomeFarmaco+" è scaduto o terminato.", "Segnalazione farmaci scaduti o esauriti", JOptionPane.WARNING_MESSAGE);
+                        }
+                        else if(giorni > 0 && (giorni<=60 && Integer.parseInt(quantita)>0)){
+                            if (JOptionPane.showConfirmDialog(null, "Il seguente farmaco " +nomeFarmaco+" è in scadenza. Lo vuoi ugualmente?", "Segnalazione farmaci in scadenza", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
                                 stato = true;
                             }
-                            else{
-                                JOptionPane.showMessageDialog(null,"Errore durante la conferma", "Errore", JOptionPane.WARNING_MESSAGE);
-                            }
+                        }
+                        else if(giorni > 60 && Integer.parseInt(quantita)>0){
+                            stato = true;
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null,"Errore durante la conferma", "Errore", JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 }
             }
@@ -289,7 +255,6 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                     pst.executeUpdate();
                     // Ordine creato
                     String query2 = "SELECT idOrdine from ordine WHERE idUtente = '"+id+"' AND dataOrdine = '"+dt2+"'";
-                    System.out.println("prova");
                     st2 = connessione.prepareStatement(query2);
                     rs2 = st2.executeQuery(query2);
                     if(!rs2.next()){
@@ -300,14 +265,18 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                     int idOrdine = rs2.getInt("idOrdine");
                     // Recupero idOrdine
                     
-                    String quantita = "", idFarmaco = "";
+                    String quantita = "", idFarmaco = "", scadenza = "";
                     String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita) VALUES (?, ?, ?)";
                     pst2 = connessione.prepareStatement(query3);
                     for (int i=0; i<tabellaFarmaci.getRowCount(); i++){
                         if(tabellaFarmaci.isRowSelected(i)){
                             quantita = (tabellaFarmaci.getModel().getValueAt(i, 5).toString());
                             idFarmaco = (tabellaFarmaci.getModel().getValueAt(i, 0).toString());
-                            if(Integer.parseInt(quantita)!=0){                 
+                            scadenza = (tabellaFarmaci.getModel().getValueAt(i, 3).toString());
+                            LocalDate dataScadenza = LocalDate.parse(scadenza);
+                            LocalDate dataSistema = LocalDate.now();
+                            long giorni = ChronoUnit.DAYS.between(dataSistema, dataScadenza);
+                                if(Integer.parseInt(quantita)>0 && giorni > 0){                 
                                 pst2.setInt(1, idOrdine);
                                 pst2.setString(2, idFarmaco);
                                 pst2.setString(3, quantita);
@@ -318,15 +287,16 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                             }
                         }
                     }
+                    JOptionPane.showMessageDialog(null,"Farmaci ordinati con successo.", "Completamento ordine", JOptionPane.WARNING_MESSAGE);
                     this.setVisible(false);
                     OrdinaFarmaco gm = new OrdinaFarmaco();
                     gm.setVisible(true);
                     gm.toFront();
-                    gm.setTitle("Pharmalink - Gestione Merci");
+                    gm.setTitle("Pharmalink - Ordina Farmaco");
                     gm.setResizable(false);
                 }
             }
-        catch (SQLException | ParseException | ClassNotFoundException ex) {
+        catch (SQLException | ParseException | ClassNotFoundException  ex) {
             Logger.getLogger(OrdinaFarmaco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_confermaButtonActionPerformed
