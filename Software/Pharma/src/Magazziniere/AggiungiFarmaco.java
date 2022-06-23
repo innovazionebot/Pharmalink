@@ -31,7 +31,7 @@ public class AggiungiFarmaco extends javax.swing.JFrame {
             String password = "";
             Class.forName(driver);
             this.connessione = DriverManager.getConnection(url+dbName, username, password);
-            id = CheckID.getID();
+            id = CheckIDMagazziniere.getID();
             String query = "SELECT idFarmaco, nome, principio, scadenza, quantita, periodoProduzione FROM farmaco";
             Statement st = connessione.createStatement();
             ResultSet rs = st.executeQuery(query);

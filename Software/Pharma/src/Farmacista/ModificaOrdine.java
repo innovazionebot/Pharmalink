@@ -172,8 +172,6 @@ public class ModificaOrdine extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void confermaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confermaButtonActionPerformed
-        ResultSet rs;
-        Statement st;
         PreparedStatement pst1, pst2, pst3;
         try{
             String nome = "", idFarmaco = "", idOrdine = "", quantitaNuova = "", quantitaAttuale = "", disponibili = "", dataConsegna = "", diminuisci = "", aumenta = "";

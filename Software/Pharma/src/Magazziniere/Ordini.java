@@ -1,16 +1,21 @@
 package Magazziniere;
 
 public class Ordini {
-    private String idOrdine, dataOrdine, dataConsegna, stato, nome, cognome;
-    public Ordini(String idOrdine, String dataOrdine, String dataConsegna, String stato, String nome, String cognome){
+    private String idOrdine, dataOrdine, dataConsegna, stato, nome, cognome, note;
+    public Ordini(String idOrdine, String dataOrdine, String dataConsegna, String stato, String nome, String cognome, String note){
         this.idOrdine = idOrdine;
         this.dataOrdine = dataOrdine;
         this.dataConsegna = dataConsegna;
         this.stato = stato;
         this.nome = nome;
         this.cognome = cognome;
+        this.note = note;
     }
 
+    public String getNote(){
+        return note;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -28,7 +33,7 @@ public class Ordini {
     }
     
     public String getDataConsegna() {
-        return dataOrdine;
+        return dataConsegna;
     }
     public String getStato() {
         return stato;

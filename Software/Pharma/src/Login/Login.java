@@ -6,6 +6,8 @@ import Farmacista.CheckContratto;
 import Magazziniere.Magazziniere;
 import Fattorino.Fattorino;
 import Farmacista.CheckID;
+import Fattorino.CheckIDFattorino;
+import Magazziniere.CheckIDMagazziniere;
 import Farmacista.Farmacista;
 import IndirizzoIP.IndirizzoIP;
 import java.awt.*;
@@ -18,8 +20,6 @@ public class Login extends javax.swing.JFrame {
     public Login() throws ClassNotFoundException{
         IndirizzoIP address = new IndirizzoIP();
         String url = "jdbc:mysql://" + address.ip + "/";
-        //String url = "jdbc:mysql://localhost:3306/";
-        //String url = "jdbc:mysql://5.tcp.eu.ngrok.io:10833/";
         String dbName = "pharmalinkazienda";
         String driver = "com.mysql.cj.jdbc.Driver";
         String username = "root";
@@ -66,6 +66,11 @@ public class Login extends javax.swing.JFrame {
         });
 
         password_field.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        password_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                password_fieldActionPerformed(evt);
+            }
+        });
 
         nomeUtente_label.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         nomeUtente_label.setText("Email");
@@ -207,7 +212,6 @@ public class Login extends javax.swing.JFrame {
                     String query = "SELECT * FROM utente, contratto WHERE email='" + email + "' AND password='" + password +"'";  
                     pst = connessione.prepareStatement(query);
                     rs  = pst.executeQuery(query);
-
                     if(!rs.next()){
                         JOptionPane.showMessageDialog(null,"Email o password errata, riprova.", "Errore", JOptionPane.WARNING_MESSAGE);
                         pst.close();
@@ -240,6 +244,10 @@ public class Login extends javax.swing.JFrame {
                         magazzino.setVisible(true);
                         email_field.setText("");
                         password_field.setText("");
+                        String id = rs.getString("utente.id");
+                        String idContratto = rs.getString("contratto.idContratto");
+                        CheckIDMagazziniere controllo = new CheckIDMagazziniere(id);
+                        CheckContratto controllo2 = new CheckContratto(idContratto);
                     }
                     // Menù Fattorino
                     else if(email.equals(rs.getString("email")) && password.equals(rs.getString("password")) && fattorino.equals(rs.getString("lavoro"))){
@@ -253,6 +261,10 @@ public class Login extends javax.swing.JFrame {
                         corriere.setVisible(true);
                         email_field.setText("");
                         password_field.setText("");
+                        String id = rs.getString("utente.id");
+                        String idContratto = rs.getString("contratto.idContratto");
+                        CheckIDFattorino controllo = new CheckIDFattorino(id);
+                        CheckContratto controllo2 = new CheckContratto(idContratto);
                     }
                     else{
                         JOptionPane.showMessageDialog(null,"Email o password errata, riprova.", "Errore", JOptionPane.WARNING_MESSAGE);
@@ -260,7 +272,6 @@ public class Login extends javax.swing.JFrame {
                 }
                 catch(ClassNotFoundException | HeadlessException | SQLException  e){
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
-                    JOptionPane.showMessageDialog(null, e);
                 }
             }
             else{
@@ -270,6 +281,10 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(frame,"Campi vuoti in email o password", "Errore", JOptionPane.WARNING_MESSAGE);
             }
     }//GEN-LAST:event_accedi_buttonActionPerformed
+
+    private void password_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_password_fieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accedi_button;

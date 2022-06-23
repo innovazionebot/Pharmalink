@@ -6,7 +6,7 @@ import java.awt.HeadlessException;
 import java.sql.*;
 import java.util.logging.*;
 import javax.swing.*;
-import Magazziniere.CheckID;
+import Magazziniere.CheckIDMagazziniere;
 
 public class Magazziniere extends javax.swing.JFrame {
     private Connection connessione;
@@ -131,7 +131,7 @@ public class Magazziniere extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void supervisionaOrdiniButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supervisionaOrdiniButtonActionPerformed
-        id = CheckID.getID();
+        id = CheckIDMagazziniere.getID();
         try{
             this.setVisible(false);
             SupervisionaOrdini so = new SupervisionaOrdini();
@@ -140,14 +140,14 @@ public class Magazziniere extends javax.swing.JFrame {
             so.setTitle("Pharmalink - Supervisiona Ordini");
             so.getContentPane().setBackground(new java.awt.Color(198,231,201));
         }
-        catch(HeadlessException  e){
+        catch(HeadlessException | ClassNotFoundException e){
             Logger.getLogger(Magazziniere.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_supervisionaOrdiniButtonActionPerformed
 
     private void aggiungiFarmacoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aggiungiFarmacoButtonActionPerformed
-        id = CheckID.getID();
+        id = CheckIDMagazziniere.getID();
         try{
             this.setVisible(false);
             AggiungiFarmaco af = new AggiungiFarmaco();

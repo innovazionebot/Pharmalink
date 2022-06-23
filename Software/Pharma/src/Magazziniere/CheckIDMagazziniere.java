@@ -2,9 +2,9 @@ package Magazziniere;
 
 import Magazziniere.*;
 
-public class CheckID {
+public class CheckIDMagazziniere {
     static String id;
-    public CheckID(String a){
+    public CheckIDMagazziniere(String a){
         id = a;
     }
     public static String getID() {

@@ -43,6 +43,7 @@ public class Farmacista extends javax.swing.JFrame {
         gestioneOrdiniButton = new javax.swing.JButton();
         gestioneContrattoButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        checkOrdineButton = new javax.swing.JButton();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -91,6 +92,16 @@ public class Farmacista extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel2.setText("Menù Farmacista");
 
+        checkOrdineButton.setBackground(new java.awt.Color(4, 76, 208));
+        checkOrdineButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        checkOrdineButton.setForeground(new java.awt.Color(255, 255, 255));
+        checkOrdineButton.setText("Check Ordine");
+        checkOrdineButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkOrdineButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,24 +109,26 @@ public class Farmacista extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel2)
-                            .addComponent(gestioneContrattoButton)))
+                        .addContainerGap()
+                        .addComponent(logoutButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(153, 153, 153)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(gestioneOrdiniButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CatalogoButton, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(logoutButton)))
-                .addContainerGap(124, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gestioneContrattoButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(gestioneOrdiniButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(CatalogoButton, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                .addComponent(checkOrdineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(152, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(122, 122, 122))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
+                .addGap(22, 22, 22)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(gestioneContrattoButton)
@@ -124,6 +137,8 @@ public class Farmacista extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(gestioneOrdiniButton)
                 .addGap(18, 18, 18)
+                .addComponent(checkOrdineButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -199,7 +214,6 @@ public class Farmacista extends javax.swing.JFrame {
                 mc.setVisible(true);
                 mc.toFront();
                 mc.setTitle("Pharmalink - Ordina farmaco");
-                mc.setExtendedState(JFrame.MAXIMIZED_BOTH); 
                 mc.getContentPane().setBackground(new java.awt.Color(198,231,201));
                 CheckID controllo = new CheckID(id);
             }
@@ -243,8 +257,40 @@ public class Farmacista extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_gestioneContrattoButtonActionPerformed
 
+    private void checkOrdineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOrdineButtonActionPerformed
+        id = CheckID.getID();
+        Statement pst;
+        ResultSet rs;
+        try{
+            String query = "SELECT * from utente WHERE id='"+id+"'";
+            pst = connessione.prepareStatement(query);
+            rs  = pst.executeQuery(query);
+                
+            if(!rs.next() && id.equals(rs.getString("id"))){
+                    JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
+                    pst.close();
+                    rs.close();
+                }
+            else{
+                this.setVisible(false);
+                CheckOrdine gcf = new CheckOrdine();
+                gcf.setVisible(true);
+                gcf.toFront();
+                gcf.setTitle("Pharmalink - Check Ordine");
+                gcf.setResizable(true);
+                gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
+                CheckID controllo = new CheckID(id);
+            }
+        }
+        catch(HeadlessException | SQLException | ClassNotFoundException e){
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_checkOrdineButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CatalogoButton;
+    private javax.swing.JButton checkOrdineButton;
     private javax.swing.JButton gestioneContrattoButton;
     private javax.swing.JButton gestioneOrdiniButton;
     private javax.swing.JLabel jLabel2;

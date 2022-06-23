@@ -188,7 +188,7 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
             int rigaSelezionata = tabellaFarmaci.getSelectedRow();
             String nomeFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 1).toString());
             String idFarmacoSelezionato = (tabellaFarmaci.getModel().getValueAt(rigaSelezionata, 0).toString());
-            String queryFarmaco = "SELECT idFarmaco, scadenza FROM farmaco WHERE nome = '"+nomeFarmacoSelezionato+"' AND idFarmaco = '"+idFarmacoSelezionato+"'";
+            String queryFarmaco = "SELECT idFarmaco, scadenza, periodoProduzione FROM farmaco WHERE nome = '"+nomeFarmacoSelezionato+"' AND idFarmaco = '"+idFarmacoSelezionato+"'";
             st = connessione.prepareStatement(queryFarmaco);
             rs = st.executeQuery(queryFarmaco);
             if(!rs.next()){
@@ -265,25 +265,49 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                     int idOrdine = rs2.getInt("idOrdine");
                     // Recupero idOrdine
                     
-                    String quantita = "", idFarmaco = "", scadenza = "";
-                    String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita) VALUES (?, ?, ?)";
+                    String quantita = "", idFarmaco = "", scadenza = "", disponibile = "", dataDisponibili = "", nomeFarmaco="";
+                    String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita, ordineCaricato) VALUES (?, ?, ?, ?)";
                     pst2 = connessione.prepareStatement(query3);
                     for (int i=0; i<tabellaFarmaci.getRowCount(); i++){
                         if(tabellaFarmaci.isRowSelected(i)){
                             quantita = (tabellaFarmaci.getModel().getValueAt(i, 5).toString());
                             idFarmaco = (tabellaFarmaci.getModel().getValueAt(i, 0).toString());
                             scadenza = (tabellaFarmaci.getModel().getValueAt(i, 3).toString());
+                            disponibile = (tabellaFarmaci.getModel().getValueAt(i, 4).toString());
+                            nomeFarmaco = (tabellaFarmaci.getModel().getValueAt(i, 1).toString());
                             LocalDate dataScadenza = LocalDate.parse(scadenza);
                             LocalDate dataSistema = LocalDate.now();
                             long giorni = ChronoUnit.DAYS.between(dataSistema, dataScadenza);
-                                if(Integer.parseInt(quantita)>0 && giorni > 0){                 
-                                pst2.setInt(1, idOrdine);
-                                pst2.setString(2, idFarmaco);
-                                pst2.setString(3, quantita);
-                                pst2.executeUpdate();
-                                String completa = "UPDATE farmaco SET quantita = quantita - '"+quantita+"' WHERE idFarmaco = '"+idFarmaco+"'";
-                                pst3 = connessione.prepareStatement(completa);
-                                pst3.executeUpdate();
+                                if(Integer.parseInt(quantita)>0 && giorni > 0){
+                                    if(Integer.parseInt(quantita) > Integer.parseInt(disponibile)){
+                                        String periodo = rs.getString("periodoProduzione");
+                                        Date dt = new Date();
+                                        DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                                        String data = formato.format(dt);
+                                        Calendar dataConsegna = Calendar.getInstance();
+                                        dataConsegna.setTime(formato.parse(data));
+                                        dataConsegna.add(Calendar.DATE, Integer.parseInt(periodo));
+                                        data = formato.format(dataConsegna.getTime());
+                                        if (JOptionPane.showConfirmDialog(null, "Il seguente farmaco " +nomeFarmaco+" è non è disponibile in quella quantità. Vuoi ugualmente la quantità massima disponibile?\nLa rimanente tornerà disponibile da giorno: '"+data+'"', "Segnalazione quantità insufficiente", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){
+                                            pst2.setInt(1, idOrdine);
+                                            pst2.setString(2, idFarmaco);
+                                            pst2.setString(3, disponibile);
+                                            pst2.setString(4, "No");
+                                            pst2.executeUpdate();
+                                            String completa = "UPDATE farmaco SET quantita = quantita - '"+disponibile+"' WHERE idFarmaco = '"+idFarmaco+"'";
+                                            pst3 = connessione.prepareStatement(completa);
+                                            pst3.executeUpdate();
+                                        }
+                                    }else{
+                                        pst2.setInt(1, idOrdine);
+                                        pst2.setString(2, idFarmaco);
+                                        pst2.setString(3, quantita);
+                                        pst2.setString(4, "No");
+                                        pst2.executeUpdate();
+                                        String completa = "UPDATE farmaco SET quantita = quantita - '"+quantita+"' WHERE idFarmaco = '"+idFarmaco+"'";
+                                        pst3 = connessione.prepareStatement(completa);
+                                        pst3.executeUpdate();
+                                    }
                             }
                         }
                     }

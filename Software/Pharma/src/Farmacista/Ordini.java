@@ -18,7 +18,7 @@ public class Ordini {
     }
     
     public String getDataConsegna() {
-        return dataOrdine;
+        return dataConsegna;
     }
     public String getStato() {
         return stato;
