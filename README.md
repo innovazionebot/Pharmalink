@@ -36,7 +36,8 @@ mettere in atto e la attuerà tramite il sistema.
 ## Cosa è stato realizzato
 
 ## Strumenti utilizzati
-
+- Java
+- Xampp
 ## Più informazioni dai documenti
 - RAD (Requirements Analysis Document) 
 - ODD (Object Design Document)
