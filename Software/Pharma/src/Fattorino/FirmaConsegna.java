@@ -169,7 +169,8 @@ public class FirmaConsegna extends javax.swing.JFrame {
         try{
             String email = emailField.getText().toLowerCase();
             String password = new String(passwordField.getPassword());
-            String query = "SELECT u.email, u.password, o.idOrdine FROM utente u INNER JOIN ordine o ON u.id = o.idUtente AND o.stato = \"In consegna\"";
+            String idOrdinePC = IDOrdine_PC.getIdOrdine();
+            String query = "SELECT u.email, u.password, o.idOrdine FROM utente u INNER JOIN ordine o ON u.id = o.idUtente AND o.stato = \"In consegna\" AND o.idOrdine = '"+idOrdinePC+"'";
             st = connessione.prepareStatement(query);
             rs = st.executeQuery(query);
             if(!rs.next()){
@@ -182,9 +183,11 @@ public class FirmaConsegna extends javax.swing.JFrame {
                 String passwordDBMS = rs.getString("u.password");
                 String idOrdine = rs.getString("o.idOrdine");
                 if(email.equals(emailDBMS) && password.equals(passwordDBMS)){
-                    String query2 = "UPDATE ordine SET stato = \"Consegnato\" WHERE idOrdine = '"+idOrdine+"'";
+                    String query2 = "UPDATE ordine SET stato = \"Consegnato\", note = \"Nessun errore durante la fase di consegna\" WHERE idOrdine = '"+idOrdine+"'";
                     pst = connessione.prepareStatement(query2);
                     pst.executeUpdate();
+                    id = CheckIDFattorino.getID();
+                    System.out.println("ID fattorino: "+ id);
                     String query3 = "UPDATE utente SET flag = 0 WHERE id = '"+id+"'";
                     pst2 = connessione.prepareStatement(query3);
                     pst2.executeUpdate();

@@ -270,7 +270,7 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null,"Email o password errata, riprova.", "Errore", JOptionPane.WARNING_MESSAGE);
                     }
                 }
-                catch(ClassNotFoundException | HeadlessException | SQLException  e){
+                catch(ClassNotFoundException | HeadlessException | SQLException | InterruptedException  e){
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
                 }
             }

@@ -1,15 +1,20 @@
 package Farmacista;
 
 public class Check2 {
-    private String nome, principio, dataScadenza, quantita;
+    private String idFarmaco, nome, principio, dataScadenza, quantita;
 
-    public Check2(String nome, String principio, String dataScadenza, String quantita) {
+    public Check2(String idFarmaco, String nome, String principio, String dataScadenza, String quantita) {
         this.nome = nome;
         this.principio = principio;
         this.dataScadenza = dataScadenza;
         this.quantita = quantita;
+        this.idFarmaco = idFarmaco;
     }
 
+    public String getIdFarmaco(){
+        return idFarmaco;
+    }
+    
     public String getNome() {
         return nome;
     }

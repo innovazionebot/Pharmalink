@@ -32,7 +32,7 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
             this.connessione = DriverManager.getConnection(url+dbName, username, password);
             id = CheckIDMagazziniere.getID();
             String query = "SELECT o.idOrdine, o.dataOrdine, o.dataConsegna, o.stato, o.note, u.nome, u.cognome FROM ordine o INNER JOIN utente u ON o.idUtente = u.id WHERE u.lavoro = 'farmacista' AND o.stato='Errore'";
-            Statement st = connessione.createStatement();
+            Statement st = connessione.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
             Ordini ordini;
             while(rs.next()){
@@ -122,7 +122,7 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
         confermaOrdineButton.setBackground(new java.awt.Color(0, 204, 51));
         confermaOrdineButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         confermaOrdineButton.setForeground(new java.awt.Color(255, 255, 255));
-        confermaOrdineButton.setText("Risolvi Ordine");
+        confermaOrdineButton.setText("Correggi Ordine");
         confermaOrdineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confermaOrdineButtonActionPerformed(evt);
@@ -186,7 +186,7 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
                 gcf.setTitle("Pharmalink - Menù Magazziniere");
                 gcf.setResizable(false);
                 gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
-            } catch (ClassNotFoundException ex) {
+            } catch (ClassNotFoundException | InterruptedException ex) {
                 Logger.getLogger(SupervisionaOrdini.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -202,7 +202,7 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
                     String query = "UPDATE ordine SET stato = \"Consegnato\", note = \"Risolte problematiche inerenti all'ordine\" WHERE idOrdine = '"+idOrdine+"'";
                     pst = connessione.prepareStatement(query);
                     pst.executeUpdate();
-                    String query2 = "UPDATE farmacoordine SET ordineCaricato = \"Si\" WHERE idOrdine = '"+idOrdine+"'";
+                    String query2 = "UPDATE ordine SET ordineCaricato = \"Si\" WHERE idOrdine = '"+idOrdine+"'";
                     PreparedStatement pst2;
                     pst2 = connessione.prepareStatement(query2);
                     pst2.executeUpdate();

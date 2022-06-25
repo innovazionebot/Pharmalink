@@ -7,11 +7,12 @@ import java.sql.*;
 import java.util.logging.*;
 import javax.swing.*;
 import Magazziniere.CheckIDMagazziniere;
+import java.awt.*;
 
-public class Magazziniere extends javax.swing.JFrame {
+public class Magazziniere extends javax.swing.JFrame{
     private Connection connessione;
     private String id;
-    public Magazziniere() throws ClassNotFoundException {
+    public Magazziniere() throws ClassNotFoundException, InterruptedException{
         this.getContentPane().setBackground(new java.awt.Color(198,231,201));
         IndirizzoIP address = new IndirizzoIP();
         String url = "jdbc:mysql://" + address.ip + "/";
@@ -27,6 +28,31 @@ public class Magazziniere extends javax.swing.JFrame {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        try{
+            String idOrdine = "";
+            String query = "SELECT COUNT(idOrdine) from ordine WHERE stato = \"Errore\"";
+            Statement st = connessione.prepareStatement(query);
+            ResultSet rs = st.executeQuery(query);
+            if(!rs.next()){
+                JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
+                st.close();
+                rs.close();
+            }
+            else{
+                String numero = rs.getString("COUNT(idOrdine)");
+                if(Integer.parseInt(numero) >=1){
+                    ImageIcon icona = new ImageIcon("C:\\Users\\salva\\Documents\\NetBeansProjects\\Pharma\\src\\Magazziniere\\icon.png");
+                    JLabel avvertenza = new JLabel (icona);
+                    avvertenza.setBounds(400,200, 100,30);
+                    avvertenza.setSize(50, 50);
+                    this.add(avvertenza);
+                }
+            }
+        }
+        catch(HeadlessException | SQLException e){
+            Logger.getLogger(Magazziniere.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, e);
         }
         initComponents();
     }
@@ -88,7 +114,7 @@ public class Magazziniere extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(supervisionaOrdiniButton)
                     .addComponent(aggiungiFarmacoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logoutButton)
@@ -97,7 +123,7 @@ public class Magazziniere extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(aggiungiFarmacoButton)
@@ -119,7 +145,7 @@ public class Magazziniere extends javax.swing.JFrame {
             try {
                 this.setVisible(false);
                 Login log = new Login();
-                log.getContentPane().setBackground(new java.awt.Color(198,231,201));
+                //log.getContentPanesupervisionaOrdiniButton().setBackground(new java.awt.Color(198,231,201));
                 log.toFront();
                 log.setResizable(false);
                 log.setVisible(true);

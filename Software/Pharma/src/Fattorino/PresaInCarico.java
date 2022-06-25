@@ -43,10 +43,9 @@ public class PresaInCarico extends javax.swing.JFrame {
             String query2 = "SELECT flag FROM utente WHERE id = '"+id+"'";
             Statement st = connessione.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
-            System.out.println("A\n");
             Statement st2 = connessione.prepareStatement(query2);
             ResultSet rs2 = st2.executeQuery(query2);
-            System.out.println(id);
+            System.out.println("ID Fattorino: "+id);
             Ordini ordini;
             if(!rs.next()){
                 JOptionPane.showMessageDialog(null,"Errore durante la comunicazione con il DBMS.", "Errore", JOptionPane.WARNING_MESSAGE);
@@ -60,7 +59,7 @@ public class PresaInCarico extends javax.swing.JFrame {
             }
             else{
                 String flag = rs2.getString("flag");
-                System.out.println(flag);
+                System.out.println("Flag attuale: "+flag);
                 if(Integer.parseInt(flag)==0){
                     ordini = new Ordini (rs.getString("MIN(o.idOrdine)"), rs.getString("u.nome"), rs.getString("u.cognome"), rs.getString("u.indirizzo"));
                     carichiList.add(ordini);
@@ -72,7 +71,6 @@ public class PresaInCarico extends javax.swing.JFrame {
                     pst2 = connessione.prepareStatement(setFlag);
                     pst2.executeUpdate();
                     pst.executeUpdate();
-                    System.out.println("Pasqualino");
                 }
                 else{
                     String query3 = "SELECT idOrdine FROM ordine WHERE fattorino = '"+id+"' AND stato = \"In consegna\"";
@@ -85,6 +83,7 @@ public class PresaInCarico extends javax.swing.JFrame {
                     }
                     else{
                         String idOrdine = rs3.getString("idOrdine");
+                        IDOrdine_PC controlloIdOrdine = new IDOrdine_PC(idOrdine);
                         String query4 = "SELECT o.idOrdine, u.nome, u.cognome, u.indirizzo FROM ordine o INNER JOIN utente u ON o.idUtente = u.id AND u.lavoro= \"farmacista\" AND o.stato = \"In consegna\" AND o.idOrdine = '"+idOrdine+"'";
                         Statement st4 = connessione.prepareStatement(query4);
                         ResultSet rs4 = st4.executeQuery(query4);
@@ -99,7 +98,7 @@ public class PresaInCarico extends javax.swing.JFrame {
                             to.setTitle("Pharmalink - Menù Fattorino");
                             to.setResizable(false);
                             to.getContentPane().setBackground(new java.awt.Color(198,231,201));
-                            CheckIDFattorino controllo = new CheckIDFattorino(id);
+                            CheckIDFattorino controlloIdFattorino = new CheckIDFattorino(id);
                         }
                         ordini = new Ordini(rs4.getString("o.idOrdine"), rs4.getString("u.nome"), rs4.getString("u.cognome"), rs4.getString("u.indirizzo"));
                         carichiList.add(ordini); 

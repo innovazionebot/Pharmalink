@@ -2,6 +2,12 @@ package Farmacista;
 
 import IndirizzoIP.IndirizzoIP;
 import java.sql.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,13 +38,14 @@ public class MostraFarmaci extends javax.swing.JFrame {
            id = CheckID.getID();
            idOrdine = ID_Ordine.getID();
            System.out.println(idOrdine);
-           String query = "SELECT f.nome, f.principio, f.scadenza, fo.quantita FROM farmaco f INNER JOIN farmacoordine fo ON f.idFarmaco = fo.idFarmaco INNER JOIN ordine o ON o.idOrdine = fo.idOrdine INNER JOIN utente u ON u.id = o.idUtente WHERE u.id = '"+id+"' AND o.stato = \"Consegnato\" AND o.idOrdine = '"+idOrdine+"' AND fo.ordineCaricato = \"No\"";
+           String query = "SELECT f.nome, f.principio, f.scadenza, fo.quantita, fo.idFarmaco, o.dataConsegna FROM farmaco f INNER JOIN farmacoordine fo ON f.idFarmaco = fo.idFarmaco INNER JOIN ordine o ON o.idOrdine = fo.idOrdine INNER JOIN utente u ON u.id = o.idUtente WHERE u.id = '"+id+"' AND o.stato = \"Consegnato\" AND o.idOrdine = '"+idOrdine+"' AND o.ordineCaricato = \"No\"";
            Statement st = connessione.prepareStatement(query);
            ResultSet rs = st.executeQuery(query);
            Check2 check2;
            while(rs.next()){
-               check2 = new Check2(rs.getString("f.nome"), rs.getString("f.principio"), rs.getString("f.scadenza"), rs.getString("fo.quantita"));
+               check2 = new Check2(rs.getString("fo.idFarmaco"), rs.getString("f.nome"), rs.getString("f.principio"), rs.getString("f.scadenza"), rs.getString("fo.quantita"));
                checks2List.add(check2);
+               DataConsegnaCheck a = new DataConsegnaCheck(rs.getString("o.dataConsegna"));
            }      
        }
        catch (SQLException ex){
@@ -53,12 +60,13 @@ public class MostraFarmaci extends javax.swing.JFrame {
     public void mostra_check2() throws ClassNotFoundException{
         ArrayList<Check2> checks2 = check2List();
         DefaultTableModel model = (DefaultTableModel) tabellaFarmaciOrdine.getModel();
-        Object[] righe = new Object[4];
+        Object[] righe = new Object[5];
         for(int i=0;i<checks2.size(); i++){
-            righe[0] = checks2.get(i).getNome();
-            righe[1] = checks2.get(i).getPrincipio();
-            righe[2] = checks2.get(i).getDataScadenza();
-            righe[3] = checks2.get(i).getQuantita();
+            righe[0] = checks2.get(i).getIdFarmaco();
+            righe[1] = checks2.get(i).getNome();
+            righe[2] = checks2.get(i).getPrincipio();
+            righe[3] = checks2.get(i).getDataScadenza();
+            righe[4] = checks2.get(i).getQuantita();
             model.addRow(righe);
         }
     }
@@ -78,11 +86,11 @@ public class MostraFarmaci extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome Farmaco", "Principio Attivo", "Data scadenza", "Quantità ordinata", "Quantita ricevuta"
+                "ID Farmaco", "Nome Farmaco", "Principio Attivo", "Data scadenza", "Quantità ordinata", "Quantita ricevuta"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -138,29 +146,61 @@ public class MostraFarmaci extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confermaButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confermaButton1ActionPerformed
-        String quantitaOrdinata = "", quantitaRicevuta = "", nome = "";
+        String quantitaOrdinata = "", quantitaRicevuta = "", nomi = "", idFarmaco = "";
         try{
             for(int i=0; i<tabellaFarmaciOrdine.getRowCount(); i++){
                 if(tabellaFarmaciOrdine.isRowSelected(i)){
-                    quantitaOrdinata = tabellaFarmaciOrdine.getModel().getValueAt(i, 3).toString();
-                    quantitaRicevuta = tabellaFarmaciOrdine.getModel().getValueAt(i, 4).toString();
-                    nome = tabellaFarmaciOrdine.getModel().getValueAt(i, 0).toString();
-                    if(Integer.parseInt(quantitaRicevuta) == Integer.parseInt(quantitaOrdinata)){
+                    idFarmaco = tabellaFarmaciOrdine.getModel().getValueAt(i, 0).toString();
+                    quantitaOrdinata = tabellaFarmaciOrdine.getModel().getValueAt(i, 4).toString();
+                    quantitaRicevuta = tabellaFarmaciOrdine.getModel().getValueAt(i, 5).toString();
+                    nomi = tabellaFarmaciOrdine.getModel().getValueAt(i, 1).toString();
+                    LocalDateTime dataSistema = LocalDateTime.now();
+                    LocalDateTime dataMassima = LocalDate.now().atTime(20, 0);
+                    Date dt = new Date();
+                    DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                    String data = formato.format(dt);
+                    String dataConsegna = DataConsegnaCheck.getDataConsegnaCheck();
+                    int confrontoDataAttuale_DataMassima = dataSistema.compareTo(dataMassima);
+                    int confrontoDataAttuale_DataConsegna = data.compareTo(dataConsegna);
+                    if(confrontoDataAttuale_DataConsegna == 0 && confrontoDataAttuale_DataMassima < 0){
+                        if(Integer.parseInt(quantitaRicevuta) == Integer.parseInt(quantitaOrdinata)){
                         JOptionPane.showConfirmDialog(null, "I farmaci sono stati caricati correttamente nel sistema.", "Conferma avvenuta con successo",   PLAIN_MESSAGE);
-                        String query = "UPDATE farmacoordine SET ordineCaricato = \"Si\" WHERE idOrdine = '"+idOrdine+"'";
+                        String query = "UPDATE ordine o INNER JOIN farmacoordine fo ON o.idOrdine = fo.idOrdine SET o.ordineCaricato = \"Si\" WHERE o.idOrdine = '"+idOrdine+"' AND fo.idFarmaco = '"+idFarmaco+"'";
                         PreparedStatement pst;
                         pst = connessione.prepareStatement(query);
                         pst.executeUpdate();
+                        String query2 = "UPDATE ordine SET note = \"Il farmacista ha caricato i farmaci nel suo sistema.\" WHERE idOrdine = '"+idOrdine+"'";
+                        PreparedStatement pst2;
+                        pst2 = connessione.prepareStatement(query2);
+                        pst2.executeUpdate();
+                        }
+                        else if(Integer.parseInt(quantitaRicevuta) != Integer.parseInt(quantitaOrdinata)){
+                            JOptionPane.showConfirmDialog(null, "La quantità ricevuta è diversa rispetto alla quantità richiesta.\nVerrai contattato il giorno successivo da un operatore per risolvere questo problema.", "Conferma avvenuta con successo",   PLAIN_MESSAGE);
+                            String note = "";
+                            String query = "UPDATE ordine SET stato = \"Errore\", note = '"+note+"' WHERE idOrdine = '"+idOrdine+"'";
+                            PreparedStatement pst;
+                            pst = connessione.prepareStatement(query);
+                            pst.executeUpdate();
+                            String query2 = "UPDATE ordine SET stato = \"Errore\", note = \"I seguenti farmaci non sono arrivati correttamente: \\n\" '"+nomi+"' WHERE idOrdine = '"+idOrdine+"'";
+                            PreparedStatement pst2;
+                            pst2 = connessione.prepareStatement(query2);
+                            pst2.executeUpdate();
+                        }
+                        else{
+                            JOptionPane.showConfirmDialog(null, "Nessuna quantità inserita.", "Errore durante la compilazione",   WARNING_MESSAGE);
+                        }
                     }
-                    else if(Integer.parseInt(quantitaRicevuta) != Integer.parseInt(quantitaOrdinata)){
-                        JOptionPane.showConfirmDialog(null, "La quantità ricevuta è diversa rispetto alla quantità richiesta.\nVerrai contattato il giorno successivo da un operatore per risolvere questo problema.", "Conferma avvenuta con successo",   PLAIN_MESSAGE);
-                        String query = "UPDATE ordine SET stato = \"Errore\" WHERE idOrdine = '"+idOrdine+"'";
-                        PreparedStatement pst;
-                        pst = connessione.prepareStatement(query);
+                    else if(confrontoDataAttuale_DataConsegna == 0 && confrontoDataAttuale_DataMassima > 0){
+                        JOptionPane.showMessageDialog(null, "Tempo scaduto per caricare gli ordini nel sistema", "Errore durante il check degli ordini", WARNING_MESSAGE);
+                        String query = "UPDATE ordine o INNER JOIN farmacoordine fo ON o.idOrdine = fo.idOrdine SET o.ordineCaricato = \"Si\", o.stato = \"Errore\" WHERE fo.idFarmaco = '"+idFarmaco+"'";
+                        PreparedStatement pst = connessione.prepareStatement(query);
                         pst.executeUpdate();
                     }
                     else{
-                        JOptionPane.showConfirmDialog(null, "Nessuna quantità inserita.", "Errore durante la compilazione",   WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Tempo scaduto per caricare gli ordini nel sistema", "Errore durante il check degli ordini", WARNING_MESSAGE);
+                        String query = "UPDATE ordine o INNER JOIN farmacoordine fo ON o.idOrdine = fo.idOrdine SET o.ordineCaricato = \"Si\", o.stato = \"Errore\" WHERE fo.idFarmaco = '"+idFarmaco+"'";
+                        PreparedStatement pst = connessione.prepareStatement(query);
+                        pst.executeUpdate();
                     }
                 }
             }

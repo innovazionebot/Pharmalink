@@ -29,7 +29,7 @@ public class CheckOrdine extends javax.swing.JFrame {
            Class.forName(driver);
            this.connessione = DriverManager.getConnection(url+dbName, username, password);
            id = CheckID.getID();
-           String query = "SELECT DISTINCT o.idOrdine, o.dataConsegna FROM ordine o INNER JOIN farmacoordine fo ON o.idOrdine = fo.idOrdine WHERE o.idUtente = '"+id+"' AND o.stato = \"Consegnato\" AND fo.ordineCaricato = \"No\"";
+           String query = "SELECT DISTINCT o.idOrdine, o.dataConsegna FROM ordine o INNER JOIN farmacoordine fo ON o.idOrdine = fo.idOrdine WHERE o.idUtente = '"+id+"' AND o.stato = \"Consegnato\" AND o.ordineCaricato = \"No\"";
            Statement st = connessione.prepareStatement(query);
            ResultSet rs = st.executeQuery(query);
            Check check;

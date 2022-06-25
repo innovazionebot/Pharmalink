@@ -266,7 +266,7 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                     // Recupero idOrdine
                     
                     String quantita = "", idFarmaco = "", scadenza = "", disponibile = "", dataDisponibili = "", nomeFarmaco="";
-                    String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita, ordineCaricato) VALUES (?, ?, ?, ?)";
+                    String query3 = "INSERT INTO farmacoordine(idOrdine, idFarmaco, quantita) VALUES (?, ?, ?)";
                     pst2 = connessione.prepareStatement(query3);
                     for (int i=0; i<tabellaFarmaci.getRowCount(); i++){
                         if(tabellaFarmaci.isRowSelected(i)){
@@ -292,8 +292,10 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                                             pst2.setInt(1, idOrdine);
                                             pst2.setString(2, idFarmaco);
                                             pst2.setString(3, disponibile);
-                                            pst2.setString(4, "No");
                                             pst2.executeUpdate();
+                                            String ordineCaricato = "UPDATE ordine SET ordineCaricato = \"No\" WHERE idOrdine = '"+idOrdine+"'";
+                                            PreparedStatement a = connessione.prepareStatement(ordineCaricato);
+                                            a.executeUpdate();
                                             String completa = "UPDATE farmaco SET quantita = quantita - '"+disponibile+"' WHERE idFarmaco = '"+idFarmaco+"'";
                                             pst3 = connessione.prepareStatement(completa);
                                             pst3.executeUpdate();
@@ -302,8 +304,10 @@ public class OrdinaFarmaco extends javax.swing.JFrame {
                                         pst2.setInt(1, idOrdine);
                                         pst2.setString(2, idFarmaco);
                                         pst2.setString(3, quantita);
-                                        pst2.setString(4, "No");
                                         pst2.executeUpdate();
+                                        String ordineCaricato = "UPDATE ordine SET ordineCaricato = \"No\" WHERE idOrdine = '"+idOrdine+"'";
+                                        PreparedStatement b = connessione.prepareStatement(ordineCaricato);
+                                        b.executeUpdate();
                                         String completa = "UPDATE farmaco SET quantita = quantita - '"+quantita+"' WHERE idFarmaco = '"+idFarmaco+"'";
                                         pst3 = connessione.prepareStatement(completa);
                                         pst3.executeUpdate();

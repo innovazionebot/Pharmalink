@@ -2,15 +2,10 @@ package Farmacista;
 
 import IndirizzoIP.IndirizzoIP;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.logging.*;
-import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 

@@ -283,7 +283,7 @@ public class AggiungiFarmaco extends javax.swing.JFrame {
                 m.setTitle("Pharmalink - Menù Magazziniere");
                 m.setResizable(false);
                 m.getContentPane().setBackground(new java.awt.Color(198,231,201));
-            } catch (ClassNotFoundException ex) {
+            } catch (ClassNotFoundException | InterruptedException ex) {
                 Logger.getLogger(AggiungiFarmaco.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
