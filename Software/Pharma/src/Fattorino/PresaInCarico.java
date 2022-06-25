@@ -71,6 +71,7 @@ public class PresaInCarico extends javax.swing.JFrame {
                     pst2 = connessione.prepareStatement(setFlag);
                     pst2.executeUpdate();
                     pst.executeUpdate();
+                    IDOrdine_PC controlloIdOrdine = new IDOrdine_PC(idOrdine);
                 }
                 else{
                     String query3 = "SELECT idOrdine FROM ordine WHERE fattorino = '"+id+"' AND stato = \"In consegna\"";

@@ -170,11 +170,12 @@ public class FirmaConsegna extends javax.swing.JFrame {
             String email = emailField.getText().toLowerCase();
             String password = new String(passwordField.getPassword());
             String idOrdinePC = IDOrdine_PC.getIdOrdine();
+            System.out.println(idOrdinePC);
             String query = "SELECT u.email, u.password, o.idOrdine FROM utente u INNER JOIN ordine o ON u.id = o.idUtente AND o.stato = \"In consegna\" AND o.idOrdine = '"+idOrdinePC+"'";
             st = connessione.prepareStatement(query);
             rs = st.executeQuery(query);
             if(!rs.next()){
-                JOptionPane.showMessageDialog(null,"Errore durante la comunicazione con il DBMS", "Errore", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Nessun ordine da firmare", "Errore", JOptionPane.WARNING_MESSAGE);
                 st.close();
                 rs.close();
             }
@@ -196,7 +197,6 @@ public class FirmaConsegna extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null,"Le credenziali inserite sono errate.", "Errore durante la conferma", JOptionPane.WARNING_MESSAGE);
                 }
             }
-            JOptionPane.showMessageDialog(null,"Farmaci ordinati con successo.", "Completamento ordine", JOptionPane.PLAIN_MESSAGE);
             this.setVisible(false);
             Fattorino gm = new Fattorino();
             gm.setVisible(true);
