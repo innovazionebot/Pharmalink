@@ -1,0 +1,9 @@
+Menù Farmacista
+
+Ordina Farmaci - Completato, funzionante e aggiornato sia visivamente che a livello di coding
+
+Gestione Ordini:
+1. Traccia Ordini - Completato, funzionante e aggiornato sia visivamente che a livello di coding
+2. Modifica Ordini - Completato, funzionante e aggiornato sia visivamente che a livello di coding
+3. Carica Ordini Ricevuti - Da completare
+4. Storico Ordini - Completato, funzionante e aggiornato sia visivamente che a livello di coding
