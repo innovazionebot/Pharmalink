@@ -63,9 +63,10 @@ public class Magazziniere extends javax.swing.JFrame{
         aggiungiFarmacoButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(31, 214, 85));
+        setBackground(new java.awt.Color(221, 221, 221));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(7, 139, 163));
         jLabel2.setText("Menù Magazziniere");
 
         logoutButton.setBackground(new java.awt.Color(7, 139, 163));
@@ -103,21 +104,20 @@ public class Magazziniere extends javax.swing.JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(logoutButton)
-                        .addContainerGap(306, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 31, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(31, 31, 31))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(88, 88, 88)
+                .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(aggiungiFarmacoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(supervisionaOrdiniButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 90, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(logoutButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel2)))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,20 +137,15 @@ public class Magazziniere extends javax.swing.JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler uscire?", "Logout", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.setVisible(false);
-                Login log = new Login();
-                log.toFront();
-                log.setResizable(false);
-                log.setVisible(true);
-                log.setTitle("Pharmalink - Autenticazione");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Magazziniere.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try{    
+            this.setVisible(false);
+            Login login = new Login();
+            login.setVisible(true);
+            login.setResizable(false);
+            login.setTitle("Pharmalink - Autenticazione");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(Magazziniere.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_logoutButtonActionPerformed
 

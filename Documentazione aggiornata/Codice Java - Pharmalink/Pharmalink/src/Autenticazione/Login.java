@@ -202,25 +202,33 @@ public class Login extends javax.swing.JFrame {
                     this.toBack();
                     this.setVisible(false);
                     Magazziniere magazzino = new Magazziniere();
-                    magazzino.getContentPane().setBackground(new java.awt.Color(198,231,201));
                     magazzino.setResizable(false);
                     magazzino.setTitle("Pharmalink - Menù Magazziniere");
                     magazzino.setVisible(true);
                     email_field.setText("");
                     password_field.setText("");
+                    String id = rs.getString("utente.id");
+                    String nome = rs.getString("utente.nome");
+                    String cognome = rs.getString("utente.cognome");
+                    String idContratto = rs.getString("contratto.idContratto");
+                    CredenzialiUtente utente = new CredenzialiUtente(id, nome, cognome, idContratto);
                 }
                 // Menù Fattorino
                 else if(email.equals(rs.getString("email")) && password.equals(rs.getString("password")) && fattorino.equals(rs.getString("lavoro"))){
                     this.toBack();
                     this.setVisible(false);
                     Fattorino corriere = new Fattorino();
-                    corriere.getContentPane().setBackground(new java.awt.Color(198,231,201));
                     corriere.setResizable(false);
                     corriere.setTitle("Pharmalink - Menù Fattorino");
                     corriere.setVisible(true);
                     corriere.setVisible(true);
                     email_field.setText("");
                     password_field.setText("");
+                    String id = rs.getString("utente.id");
+                    String nome = rs.getString("utente.nome");
+                    String cognome = rs.getString("utente.cognome");
+                    String idContratto = rs.getString("contratto.idContratto");
+                    CredenzialiUtente utente = new CredenzialiUtente(id, nome, cognome, idContratto);
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Email o password errata, riprova.", "Errore", JOptionPane.WARNING_MESSAGE);

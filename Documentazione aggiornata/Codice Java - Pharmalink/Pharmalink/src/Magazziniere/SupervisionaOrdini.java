@@ -103,7 +103,7 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
         tornaIndietroButton.setBackground(new java.awt.Color(7, 139, 163));
         tornaIndietroButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tornaIndietroButton.setForeground(new java.awt.Color(255, 255, 255));
-        tornaIndietroButton.setText("Torna al menù principale");
+        tornaIndietroButton.setText("Annulla");
         tornaIndietroButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tornaIndietroButtonActionPerformed(evt);
@@ -185,22 +185,15 @@ public class SupervisionaOrdini extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tornaIndietroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tornaIndietroButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler abbandonare la pagina?", "Avviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.toBack();
-                this.setVisible(false);
-                Magazziniere gcf = new Magazziniere();
-                gcf.toFront();
-                gcf.setVisible(true);
-                gcf.setTitle("Pharmalink - Menù Magazziniere");
-                gcf.setResizable(false);
-                gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
-            } catch (ClassNotFoundException | InterruptedException ex) {
-                Logger.getLogger(SupervisionaOrdini.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            this.setVisible(false);
+            Magazziniere magazziniere = new Magazziniere();
+            magazziniere.setVisible(true);
+            magazziniere.setResizable(false);
+            magazziniere.setTitle("Pharmalink - Menù Magazziniere");
+        } catch (ClassNotFoundException | InterruptedException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(SupervisionaOrdini.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tornaIndietroButtonActionPerformed
 

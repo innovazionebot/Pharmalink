@@ -8,4 +8,8 @@ public class IDOrdine_PC {
     public static String getIdOrdine() {
         return idOrdine;
     }
+    
+    public String toString(){
+        return idOrdine;
+    }
 }

@@ -269,22 +269,15 @@ public class AggiungiFarmaco extends javax.swing.JFrame {
     }//GEN-LAST:event_confermaButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler abbandonare la pagina?", "Avviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.toBack();
-                this.setVisible(false);
-                Magazziniere m = new Magazziniere();
-                m.toFront();
-                m.setVisible(true);
-                m.setTitle("Pharmalink - Menù Magazziniere");
-                m.setResizable(false);
-                m.getContentPane().setBackground(new java.awt.Color(198,231,201));
-            } catch (ClassNotFoundException | InterruptedException ex) {
-                Logger.getLogger(AggiungiFarmaco.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            this.setVisible(false);
+            Magazziniere magazziniere = new Magazziniere();
+            magazziniere.setVisible(true);
+            magazziniere.setResizable(false);
+            magazziniere.setTitle("Pharmalink - Menù Magazziniere");
+        } catch (ClassNotFoundException | InterruptedException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(AggiungiFarmaco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_exitButtonActionPerformed
 

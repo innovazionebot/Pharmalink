@@ -44,7 +44,6 @@ public class VisualizzaConsegne extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(query);
             Statement st2 = connessione.prepareStatement(query2);
             ResultSet rs2 = st2.executeQuery(query2);
-            System.out.println("ID Fattorino: "+id);
             Ordini ordini;
             if(!rs.next()){
                 JOptionPane.showMessageDialog(null,"Errore durante la comunicazione con il DBMS.", "Errore", JOptionPane.WARNING_MESSAGE);
@@ -63,6 +62,7 @@ public class VisualizzaConsegne extends javax.swing.JFrame {
                     ordini = new Ordini (rs.getString("MIN(o.idOrdine)"), rs.getString("u.nome"), rs.getString("u.cognome"), rs.getString("u.indirizzo"));
                     carichiList.add(ordini);
                     String idOrdine = rs.getString("MIN(o.idOrdine)");
+                    System.out.println("Id Ordine: " + idOrdine);
                     String aggiorna = "UPDATE ordine SET stato = \"In consegna\", fattorino = '"+id+"' WHERE idOrdine = '"+idOrdine+"'";
                     String setFlag = "UPDATE utente SET flag = 1 WHERE id = '"+id+"'";
                     PreparedStatement pst, pst2;
@@ -84,6 +84,7 @@ public class VisualizzaConsegne extends javax.swing.JFrame {
                     else{
                         String idOrdine = rs3.getString("idOrdine");
                         IDOrdine_PC controlloIdOrdine = new IDOrdine_PC(idOrdine);
+                        System.out.println("ID ORDINE: " + controlloIdOrdine.toString());
                         String query4 = "SELECT o.idOrdine, u.nome, u.cognome, u.indirizzo FROM ordine o INNER JOIN utente u ON o.idUtente = u.id AND u.lavoro= \"farmacista\" AND o.stato = \"In consegna\" AND o.idOrdine = '"+idOrdine+"'";
                         Statement st4 = connessione.prepareStatement(query4);
                         ResultSet rs4 = st4.executeQuery(query4);

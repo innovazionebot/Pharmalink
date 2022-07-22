@@ -98,8 +98,8 @@ public class CheckOrdiniDaConfermare_MostraFarmaci extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tabellaFarmaciOrdine);
 
-        confermaButton1.setBackground(new java.awt.Color(0, 204, 51));
-        confermaButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        confermaButton1.setBackground(new java.awt.Color(7, 139, 163));
+        confermaButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         confermaButton1.setForeground(new java.awt.Color(255, 255, 255));
         confermaButton1.setText("Conferma");
         confermaButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -108,10 +108,10 @@ public class CheckOrdiniDaConfermare_MostraFarmaci extends javax.swing.JFrame {
             }
         });
 
-        tornaIndietroButton.setBackground(new java.awt.Color(204, 0, 0));
-        tornaIndietroButton.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        tornaIndietroButton.setBackground(new java.awt.Color(7, 139, 163));
+        tornaIndietroButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tornaIndietroButton.setForeground(new java.awt.Color(255, 255, 255));
-        tornaIndietroButton.setText("Torna indietro");
+        tornaIndietroButton.setText("Annulla");
         tornaIndietroButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tornaIndietroButtonActionPerformed(evt);
@@ -134,11 +134,11 @@ public class CheckOrdiniDaConfermare_MostraFarmaci extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(confermaButton1)
-                    .addComponent(tornaIndietroButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(tornaIndietroButton)
+                    .addComponent(confermaButton1))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         pack();
@@ -215,21 +215,15 @@ public class CheckOrdiniDaConfermare_MostraFarmaci extends javax.swing.JFrame {
     }//GEN-LAST:event_confermaButton1ActionPerformed
 
     private void tornaIndietroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tornaIndietroButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler abbandonare la pagina?", "Avviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.toBack();
-                this.setVisible(false);
-                ConfermaRicezioneOrdini f = new ConfermaRicezioneOrdini();
-                f.toFront();
-                f.setVisible(true);
-                f.setTitle("Pharmalink - Conferma Ricezione Ordini");
-                f.setResizable(false);
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(CheckOrdiniDaConfermare_MostraFarmaci.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try{    
+            this.setVisible(false);
+            ConfermaRicezioneOrdini cro = new ConfermaRicezioneOrdini();
+            cro.setVisible(true);
+            cro.setResizable(false);
+            cro.setTitle("Pharmalink - Conferma Ricezione Ordini");
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(CheckOrdiniDaConfermare_MostraFarmaci.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tornaIndietroButtonActionPerformed
 

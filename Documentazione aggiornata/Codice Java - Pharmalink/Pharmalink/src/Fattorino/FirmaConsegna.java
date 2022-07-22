@@ -182,7 +182,6 @@ public class FirmaConsegna extends javax.swing.JFrame {
                     pst = connessione.prepareStatement(query2);
                     pst.executeUpdate();
                     id = CredenzialiUtente.getId();
-                    System.out.println("ID fattorino: "+ id);
                     String query3 = "UPDATE utente SET flag = 0 WHERE id = '"+id+"'";
                     pst2 = connessione.prepareStatement(query3);
                     pst2.executeUpdate();

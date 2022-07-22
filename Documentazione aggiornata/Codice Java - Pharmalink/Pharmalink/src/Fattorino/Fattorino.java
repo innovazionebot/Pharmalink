@@ -126,48 +126,51 @@ public class Fattorino extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler uscire?", "Logout", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.setVisible(false);
-                Login log = new Login();
-                log.getContentPane().setBackground(new java.awt.Color(198,231,201));
-                log.toFront();
-                log.setResizable(false);
-                log.setVisible(true);
-                log.setTitle("Pharmalink - Autenticazione");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Fattorino.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            this.setVisible(false);
+            Login log = new Login();
+            log.setVisible(true);
+            log.setResizable(false);
+            log.setTitle("Pharmalink - Autenticazione");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(Fattorino.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void firmaConsegnaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firmaConsegnaButtonActionPerformed
         id = CredenzialiUtente.getId();
-        Statement pst;
-        ResultSet rs;
+        Statement pst, pst2;
+        ResultSet rs, rs2;
         try{
             String query = "SELECT * from utente WHERE id='"+id+"'";
+            String query2 = "SELECT MIN(o.idOrdine) FROM ordine o INNER JOIN utente u ON o.idUtente = u.id WHERE u.lavoro = 'farmacista' AND o.stato='In consegna'";
             pst = connessione.prepareStatement(query);
-            rs  = pst.executeQuery(query);    
-            if(!rs.next() && id.equals(rs.getString("id"))){
+            rs  = pst.executeQuery(query);
+            pst2 = connessione.prepareStatement(query2);
+            rs2 = pst2.executeQuery(query2);
+            if(!rs.next()){
                     JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
                     pst.close();
                     rs.close();
                 }
+            else if(!rs2.next()){
+                JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
+                pst2.close();
+                rs2.close();
+            }
             else{
+                String idOrdine = rs2.getString("MIN(o.idOrdine)");
+                System.out.println(idOrdine);
                 this.setVisible(false);
                 FirmaConsegna to = new FirmaConsegna();
                 to.setVisible(true);
                 to.toFront();
                 to.setTitle("Pharmalink - Firma Consegna");
                 to.setResizable(false);
-                String nome = rs.getString("utente.nome");
-                String cognome = rs.getString("utente.cognome");
-                String idContratto = rs.getString("contratto.idContratto");
-                CredenzialiUtente controllo = new CredenzialiUtente(id, nome, cognome, idContratto);
+                CredenzialiUtente controllo = new CredenzialiUtente(id, "", "", "");
+                IDOrdine_PC idOrdine2 = new IDOrdine_PC(idOrdine);
+                System.out.println(idOrdine2.toString());
             }
         }
         catch(HeadlessException | SQLException | ClassNotFoundException e){
@@ -181,29 +184,24 @@ public class Fattorino extends javax.swing.JFrame {
         Statement pst;
         ResultSet rs;
         try{
-            String query = "SELECT * from utente, contratto WHERE id='"+id+"'";
+            String query = "SELECT * from utente WHERE id='"+id+"'";
             pst = connessione.prepareStatement(query);
-            rs  = pst.executeQuery(query);    
+            rs  = pst.executeQuery(query);
             if(!rs.next() && id.equals(rs.getString("id"))){
-                    JOptionPane.showMessageDialog(null,"Errore nel sistema.", "Errore", JOptionPane.WARNING_MESSAGE);
-                    pst.close();
-                    rs.close();
-                }
-            else{
-                this.setVisible(false);
-                VisualizzaConsegne to = new VisualizzaConsegne();
-                to.setVisible(true);
-                to.toFront();
-                to.setTitle("Pharmalink - Visualizza Consegne");
-                to.setResizable(false);
-                String nome = rs.getString("utente.nome");
-                String cognome = rs.getString("utente.cognome");
-                String idContratto = rs.getString("contratto.idContratto");
-                CredenzialiUtente controllo = new CredenzialiUtente(id, nome, cognome, idContratto);
+                JOptionPane.showMessageDialog(null,"Errore durante l'esecuzione del processo", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+                pst.close();
+                rs.close();
+            }
+        else{
+            this.setVisible(false);
+            VisualizzaConsegne go = new VisualizzaConsegne();
+            go.setVisible(true);
+            go.toFront();
+            go.setTitle("Pharmalink - Visualizza Consegne");
             }
         }
         catch(HeadlessException | SQLException | ClassNotFoundException e){
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Fattorino.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_visualizzaConsegneButtonActionPerformed

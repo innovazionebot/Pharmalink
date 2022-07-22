@@ -158,22 +158,15 @@ public class GestioneContrattiPeriodici extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void annullaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_annullaButtonActionPerformed
-        JFrame frame;
-        frame = new JFrame("Uscita");
-        frame.setResizable(false);
-        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler abbandonare la pagina?", "Avviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_NO_OPTION){
-            try {
-                this.toBack();
-                this.setVisible(false);
-                Farmacista gcf = new Farmacista();
-                gcf.toFront();
-                gcf.setVisible(true);
-                gcf.setTitle("Pharmalink - Menù Farmacista");
-                gcf.setResizable(false);
-                gcf.getContentPane().setBackground(new java.awt.Color(198,231,201));
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Farmacista.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try{    
+            this.setVisible(false);
+            Farmacista farmacista = new Farmacista();
+            farmacista.setVisible(true);
+            farmacista.setResizable(false);
+            farmacista.setTitle("Pharmalink - Menù Farmacista");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Il software non è riuscito a connettersi al database", "Errore durante la comunicazione con il DBMS", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(GestioneContrattiPeriodici.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_annullaButtonActionPerformed
     
