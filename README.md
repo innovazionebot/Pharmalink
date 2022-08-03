@@ -4,9 +4,7 @@ Ingegneria dell&#39;innovazione per le imprese digitali - A.A. 21/22
 
 # Requirements Analysis Document
 
-# Team RSRV
-
-_Andrea Riggio_
+# Team SRV
 
 _Davide Sgroi_
 
